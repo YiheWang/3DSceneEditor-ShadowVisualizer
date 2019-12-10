@@ -27,8 +27,8 @@ void Camera::keyControl(bool *keys, GLfloat deltaTime){
     GLfloat movedAmount = moveUnit * deltaTime;
     //moved angle in radians
 
-    //sphere cooridinate
-    if(keys[GLFW_KEY_UP]){
+    //sphere coordinates
+    if(keys[GLFW_KEY_W]){
         theta = theta - movedAngle;
         if(theta < 0){
             theta = 0.01f;
@@ -36,7 +36,7 @@ void Camera::keyControl(bool *keys, GLfloat deltaTime){
         updatePosition();
         update();
     }
-    if(keys[GLFW_KEY_DOWN]){
+    if(keys[GLFW_KEY_S]){
         theta = theta + movedAngle;
         if(theta > PI){
             theta = PI;
@@ -44,7 +44,7 @@ void Camera::keyControl(bool *keys, GLfloat deltaTime){
         updatePosition();
         update();
     }
-    if(keys[GLFW_KEY_LEFT]){
+    if(keys[GLFW_KEY_A]){
         phi = phi - movedAngle;
         if(phi < 0){
             phi = phi + 2 * PI;
@@ -52,7 +52,7 @@ void Camera::keyControl(bool *keys, GLfloat deltaTime){
         updatePosition();
         update();
     }
-    if(keys[GLFW_KEY_RIGHT]){
+    if(keys[GLFW_KEY_D]){
         phi = phi + movedAngle;
         if(phi > 2 * PI){
             phi = phi - 2 * PI;
@@ -60,31 +60,13 @@ void Camera::keyControl(bool *keys, GLfloat deltaTime){
         updatePosition();
         update();
     }
-
-    //Cartesian coordinates
-    if(keys[GLFW_KEY_W]){
-        position = position + movedAmount * worldUp;
-        updateAngle();
-    }
-    if(keys[GLFW_KEY_S]){
-        position = position - movedAmount * worldUp;
-        updateAngle();
-    }// move on y axis
-    if(keys[GLFW_KEY_A]){
-        position = position - movedAmount * glm::vec3(1.0, 0.0, 0.0);
-        updateAngle();
-    }
-    if(keys[GLFW_KEY_D]){
-        position = position + movedAmount * glm::vec3(1.0, 0.0, 0.0);
-        updateAngle();
-    } // move on x axis
     if(keys[GLFW_KEY_Q]){
-        position = position + movedAmount * glm::vec3(0.0, 0.0, 1.0);
-        updateAngle();
+        radius = radius + movedAmount;
+        updatePosition();
     }
     if(keys[GLFW_KEY_E]){
-        position = position - movedAmount * glm::vec3(0.0, 0.0, 1.0);
-        updateAngle();
+        radius = radius - movedAmount;
+        updatePosition();
     }// move on z axis
 }
 
