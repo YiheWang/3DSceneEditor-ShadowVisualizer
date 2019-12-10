@@ -153,8 +153,8 @@ int main()
     GLuint uniformTriangleNormal = 0;
 
     float ratio = (float)bufferWidth / (float)bufferHeight;
-    projection = glm::ortho(-1.0f * ratio, 1.0f * ratio, -1.0f, 1.0f, 0.1f, 100.0f);
-    //projection = glm::perspective(glm::radians(45.0f), (float)bufferWidth/(float)bufferHeight, 0.1f, 100.0f);
+    //projection = glm::ortho(-1.0f * ratio, 1.0f * ratio, -1.0f, 1.0f, 0.1f, 100.0f);
+    projection = glm::perspective(glm::radians(45.0f), (float)bufferWidth/(float)bufferHeight, 0.1f, 100.0f);
     //  field of view in y direction,  aspect, near and far
 
     // Loop until window closed
@@ -210,9 +210,6 @@ int main()
             else {
                 glUniform3f(uniformColor, 1.0f, 0.0f, 0.0f);
                 meshList[i]->renderMesh(uniformModel, uniformTriangleNormal, uniformIsFlatShading);
-                //meshList[i]->renderMeshWithPhongShading(uniformModel, uniformIsFlatShading);
-                //meshList[i]->renderMeshWithWireframe(uniformModel, uniformIsFlatShading);
-                //meshList[i]->renderMeshWithFlatShading(uniformModel, uniformTriangleNormal, uniformIsFlatShading);
             }
         }
 
@@ -461,18 +458,6 @@ void handleKeys(GLFWwindow* window, int key, int code, int action, int mode){
                 }
             }
             break;
-
-            //change projection
-        case GLFW_KEY_P:
-            if(action == GLFW_PRESS){
-                changeToPerspective();
-            }
-            break;
-        case GLFW_KEY_O:
-            if(action == GLFW_PRESS){
-                changeToOrthographic();
-            }
-            break;
     }
 }
 
@@ -504,13 +489,7 @@ void handleMouseButton(GLFWwindow* window, int button, int action, int mods){
         double smallestT = DBL_MAX;
         for (int i = 0; i < meshList.size(); ++i){
             double tOfMesh;
-            if(isPerspective){
-                tOfMesh = meshList[i]->findTOfRayIntersectWithMesh(camera.getCameraPosition(), ray_world);
-            }
-            else {
-                tOfMesh = meshList[i]->findTOfRayIntersectWithMesh(ray_world, normalize(-camera.getFront()));
-                std::cout<<tOfMesh<<std::endl;
-            }
+            tOfMesh = meshList[i]->findTOfRayIntersectWithMesh(camera.getCameraPosition(), ray_world);
             if(tOfMesh < smallestT){
                 mouseClickMeshIndex = i;
                 smallestT = tOfMesh;
@@ -537,15 +516,4 @@ void loadFile(){
     calculatePhongShadingNormals(indicesOfBunny, verticesOfBunny);
     calculatePhongShadingNormals(indicesOfBumpyCube, verticesOfBumpyCube);
     calculatePhongShadingNormals(indicesOfUnitCube, verticesOfUnitCube);
-}
-
-void changeToPerspective(){
-    projection = glm::perspective(glm::radians(45.0f), (float)bufferWidth / (float)bufferHeight, 0.1f, 100.0f);
-    isPerspective = true;
-}
-
-void changeToOrthographic(){
-    float ratio = (float)bufferWidth / (float)bufferHeight;
-    projection = glm::ortho(-1.0f * ratio, 1.0f * ratio, -1.0f, 1.0f, 0.1f, 100.0f);
-    isPerspective = false;
 }
