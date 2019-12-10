@@ -9,20 +9,18 @@
 #include "Header.h"
 
 class Light {
-public:
+protected:
     Light();
     Light(GLfloat red, GLfloat green, GLfloat blue,
-            GLfloat ambientIntensity, GLfloat diffuseIntensity,
-            GLfloat x, GLfloat y, GLfloat z);
+            GLfloat ambientIntensity, GLfloat diffuseIntensity);
 
-    void useLight(GLfloat lightColourLocation, GLfloat ambientIntensityLocation,
-                  GLfloat diffuseIntensityLocation, GLfloat lightPositionLocation);
+    virtual void useLight(GLfloat lightColourLocation, GLfloat ambientIntensityLocation,
+                  GLfloat diffuseIntensityLocation);
 
     ~Light();
 
-private:
+protected:
     glm::vec3 lightColor;
-    glm::vec3 lightPosition;
     GLfloat ambientIntensity;
     GLfloat diffuseIntensity;
 };

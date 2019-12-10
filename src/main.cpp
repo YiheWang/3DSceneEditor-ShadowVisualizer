@@ -7,6 +7,7 @@
 #include "Camera.h"
 #include "Material.h"
 #include "Light.h"
+#include "PointLight.h"
 
 using namespace std;
 
@@ -18,7 +19,7 @@ GLint bufferHeight = 0;
 
 //Window mainWindow;
 Camera camera;
-Light light;
+PointLight pointLight;
 Material material;
 
 vector<Mesh*> meshList;
@@ -134,7 +135,7 @@ int main()
             0.872665f, 1.0f); // move 10 degree every time unit
 
     material = Material(1.0f, 132);
-    light = Light(1.0f, 1.0f, 1.0f,
+    pointLight = PointLight(1.0f, 1.0f, 1.0f,
                   0.1f, 0.6f,
                   -5.0f, 5.0f, 5.0f);
 
@@ -192,7 +193,7 @@ int main()
         uniformIsFlatShading = shaderList[0].getIsFlatShadingLocation();
         uniformTriangleNormal = shaderList[0].getTriangleNormalLocation();
 
-        light.useLight(uniformLightColor, uniformAmbientIntensity,
+        pointLight.useLight(uniformLightColor, uniformAmbientIntensity,
                 uniformDiffuseIntensity, uniformLightPosition);
         material.useMaterial(uniformSpecularIntensity, uniformShininess);
 
@@ -485,7 +486,6 @@ void handleMouseButton(GLFWwindow* window, int button, int action, int mods){
 
     // Update the position of the first vertex if the left button is pressed
     if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS){
-        std::cout << ray_world[0] <<" "<< ray_world[1] <<" "<< ray_world[2]<<std::endl;
         double smallestT = DBL_MAX;
         for (int i = 0; i < meshList.size(); ++i){
             double tOfMesh;
