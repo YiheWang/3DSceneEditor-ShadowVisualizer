@@ -1,0 +1,130 @@
+//
+// Created by Yihe Wang on 2019/11/5.
+//
+
+#include "Camera.h"
+#include "Constant.h"
+
+Camera::Camera(){
+
+}
+
+Camera::Camera(glm::vec3 startPosition, glm::vec3 startUp,
+        GLfloat startAngleMoveUnit, GLfloat startMoveUnit){
+    position = startPosition;
+    worldUp = startUp;
+
+    // move one unit per time when pressing key
+    angleMoveUnit = startAngleMoveUnit;
+    moveUnit = startMoveUnit;
+    //calculate initial radius, theta and phi
+    updateAngle();
+    update();
+}
+
+void Camera::keyControl(bool *keys, GLfloat deltaTime){
+    GLfloat movedAngle = angleMoveUnit * deltaTime;
+    GLfloat movedAmount = moveUnit * deltaTime;
+    //moved angle in radians
+
+    //sphere cooridinate
+    if(keys[GLFW_KEY_UP]){
+        theta = theta - movedAngle;
+        if(theta < 0){
+            theta = 0.01f;
+        }
+        updatePosition();
+        update();
+    }
+    if(keys[GLFW_KEY_DOWN]){
+        theta = theta + movedAngle;
+        if(theta > PI){
+            theta = PI;
+        }
+        updatePosition();
+        update();
+    }
+    if(keys[GLFW_KEY_LEFT]){
+        phi = phi - movedAngle;
+        if(phi < 0){
+            phi = phi + 2 * PI;
+        }
+        updatePosition();
+        update();
+    }
+    if(keys[GLFW_KEY_RIGHT]){
+        phi = phi + movedAngle;
+        if(phi > 2 * PI){
+            phi = phi - 2 * PI;
+        }
+        updatePosition();
+        update();
+    }
+
+    //Cartesian coordinates
+    if(keys[GLFW_KEY_W]){
+        position = position + movedAmount * worldUp;
+        updateAngle();
+    }
+    if(keys[GLFW_KEY_S]){
+        position = position - movedAmount * worldUp;
+        updateAngle();
+    }// move on y axis
+    if(keys[GLFW_KEY_A]){
+        position = position - movedAmount * glm::vec3(1.0, 0.0, 0.0);
+        updateAngle();
+    }
+    if(keys[GLFW_KEY_D]){
+        position = position + movedAmount * glm::vec3(1.0, 0.0, 0.0);
+        updateAngle();
+    } // move on x axis
+    if(keys[GLFW_KEY_Q]){
+        position = position + movedAmount * glm::vec3(0.0, 0.0, 1.0);
+        updateAngle();
+    }
+    if(keys[GLFW_KEY_E]){
+        position = position - movedAmount * glm::vec3(0.0, 0.0, 1.0);
+        updateAngle();
+    }// move on z axis
+}
+
+void Camera::updatePosition(){
+    position[0] = radius * sin(theta) * sin(phi);
+    position[1] = radius * cos(theta);
+    position[2] = radius * sin(theta) * cos(phi);
+}
+
+glm::mat4 Camera::calculateViewMatrix(){
+    // center is the object you look at
+    return glm::lookAt(position, glm::vec3(0.0f, 0.0f, 0.0f), up);
+}
+
+glm::vec3 Camera::getCameraPosition(){
+    return position;
+}
+
+glm::vec3 Camera::getFront() {
+    return glm::normalize(glm::vec3(0.0f) - position);
+}
+
+void Camera::calculateSphereRadius(){
+    radius = glm::length(position);
+}
+
+void Camera::update(){
+    front = glm::vec3(0.0f, 0.0f, 0.0f) - position;
+    front = glm::normalize(front);
+
+    right = glm::normalize(glm::cross(front, worldUp));
+    up = glm::normalize(glm::cross(right, front));
+}
+
+void Camera::updateAngle(){
+    calculateSphereRadius();
+    theta = acos(position[1] / radius);
+    phi = atan(position[0] / position[2]);
+}
+
+Camera::~Camera(){
+
+}

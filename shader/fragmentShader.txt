@@ -1,0 +1,60 @@
+#version 330
+
+in vec4 vColor;
+in vec3 Normal;
+in vec3 FragPos;
+
+out vec4 outColor;
+uniform vec3 color;
+
+struct Light{
+	vec3 lightColor;
+	vec3 lightPosition;
+	float ambientIntensity;
+	float diffuseIntensity;
+};
+
+struct Material{
+	float specularIntensity;
+	float shininess;
+};
+
+uniform Light light;
+uniform Material material;
+
+uniform vec3 cameraPosition;
+
+vec4 calcLightByDirection(Light light, vec3 direction){
+	vec4 ambientColor = vec4(light.lightColor, 1.0f) * light.ambientIntensity;
+
+	float diffuseFactor = max(dot(normalize(Normal), normalize(direction)), 0.0f);
+	vec4 diffuseColor = vec4(light.lightColor * light.diffuseIntensity * diffuseFactor, 1.0f);
+
+	vec4 specularColor = vec4(0, 0, 0, 0);
+
+	if(diffuseFactor > 0.0f)
+	{
+		vec3 fragToCamera = normalize(cameraPosition - FragPos);
+		vec3 reflectedVertex = normalize(reflect(-direction, normalize(Normal)));
+
+		float specularFactor = max(dot(fragToCamera, reflectedVertex), 0.0f);
+		specularFactor = pow(specularFactor, material.shininess);
+		specularColor = vec4(light.lightColor * material.specularIntensity * specularFactor, 1.0f);
+	}
+
+	return (ambientColor + diffuseColor + specularColor);
+}
+
+vec4 calcPointLight(){
+	vec3 direction = light.lightPosition - FragPos;
+	direction = normalize(direction);
+
+	vec4 color = calcLightByDirection(light, direction);
+	return color;
+}
+
+void main()
+{
+    vec4 finalColor = calcPointLight();
+    outColor = vec4(color, 1.0f) * finalColor;
+}
