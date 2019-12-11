@@ -5,7 +5,6 @@
 #ifndef FINALPROJECT_POINTLIGHT_H
 #define FINALPROJECT_POINTLIGHT_H
 
-#include "Header.h"
 #include "Light.h"
 
 class PointLight : public Light{
@@ -15,7 +14,7 @@ public:
             GLfloat ambientIntensity, GLfloat diffuseIntensity,
             GLfloat x, GLfloat y, GLfloat z);
 
-    void useLight(GLfloat lightColourLocation, GLfloat ambientIntensityLocation,
+    void useLight(GLfloat lightColorLocation, GLfloat ambientIntensityLocation,
                   GLfloat diffuseIntensityLocation, GLfloat lightPositionLocation);
 
     ~PointLight();
