@@ -44,7 +44,8 @@ GLfloat lastTime = 0.0f;
 bool keys[1024];
 
 int mouseClickMeshIndex = -1;
-bool isPerspective = false;
+
+GLuint planeVAO, planeVBO;
 
 // Vertex Shader
 static const char* vShader = "../Shader/vertexShader.txt";
@@ -62,8 +63,8 @@ static void cursorPosition(GLFWwindow* window, double xpos, double ypos);
 
 void createShaders();
 void loadFile();
-void changeToPerspective();
-void changeToOrthographic();
+void createFloor();
+void renderFloor(GLuint uniformModel, GLuint uniformIsFlatShading, GLuint uniformColor);
 
 int main()
 {
@@ -132,6 +133,7 @@ int main()
     createShaders();
     loadFile();
     //createObjects();
+    createFloor();
 
     camera = Camera(glm::vec3(0.0f, 0.0f, 3.0f), glm::vec3(0.0f, 1.0f, 0.0f),
             0.872665f, 1.0f); // move 10 degree every time unit
@@ -225,7 +227,7 @@ int main()
         glUniformMatrix4fv(uniformView, 1, GL_FALSE, glm::value_ptr(camera.calculateViewMatrix()));
         glUniform3f(uniformCameraPosition, camera.getCameraPosition().x, camera.getCameraPosition().y, camera.getCameraPosition().z);
 
-
+        renderFloor(uniformModel, uniformIsFlatShading, uniformColor);
         for(int i = 0; i < meshList.size(); ++i){
             if(mouseClickMeshIndex == i){
                 glUniform3f(uniformColor, 0.0f, 0.0f, 1.0f);
@@ -525,6 +527,50 @@ void handleMouseButton(GLFWwindow* window, int button, int action, int mods){
         mouseClickMeshIndex = -1;
         //reset mesh index
     }
+}
+
+void createFloor(){
+    float planeVertices[] = {
+            // positions            // normals         // texcoords
+            /*25.0f, -0.5f,  25.0f,  0.0f, 1.0f, 0.0f,  25.0f,  0.0f,
+            -25.0f, -0.5f,  25.0f,  0.0f, 1.0f, 0.0f,   0.0f,  0.0f,
+            -25.0f, -0.5f, -25.0f,  0.0f, 1.0f, 0.0f,   0.0f, 25.0f,
+
+            25.0f, -0.5f,  25.0f,  0.0f, 1.0f, 0.0f,  25.0f,  0.0f,
+            -25.0f, -0.5f, -25.0f,  0.0f, 1.0f, 0.0f,   0.0f, 25.0f,
+            25.0f, -0.5f, -25.0f,  0.0f, 1.0f, 0.0f,  25.0f, 25.0f*/
+            25.0f, -0.5f,  25.0f,  0.0f, 1.0f, 0.0f,  0.0f, 1.0f, 0.0f,
+            -25.0f, -0.5f,  25.0f,  0.0f, 1.0f, 0.0f,  0.0f, 1.0f, 0.0f,
+            -25.0f, -0.5f, -25.0f,  0.0f, 1.0f, 0.0f,  0.0f, 1.0f, 0.0f,
+
+            25.0f, -0.5f,  25.0f, 0.0f, 1.0f, 0.0f,  0.0f, 1.0f, 0.0f,
+            -25.0f, -0.5f, -25.0f, 0.0f, 1.0f, 0.0f,  0.0f, 1.0f, 0.0f,
+            25.0f, -0.5f, -25.0f, 0.0f, 1.0f, 0.0f,  0.0f, 1.0f, 0.0f
+    };
+    // plane VAO
+    glGenVertexArrays(1, &planeVAO);
+    glGenBuffers(1, &planeVBO);
+    glBindVertexArray(planeVAO);
+    glBindBuffer(GL_ARRAY_BUFFER, planeVBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(planeVertices), planeVertices, GL_STATIC_DRAW);
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 9 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(1);
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 9 * sizeof(float), (void*)(3 * sizeof(float)));
+    glEnableVertexAttribArray(2);
+    glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 9 * sizeof(float), (void*)(6 * sizeof(float)));
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindVertexArray(0);
+}
+
+void renderFloor(GLuint uniformModel, GLuint uniformIsFlatShading, GLuint uniformColor){
+    glUniform3f(uniformColor, 1.0f, 1.0f, 1.0f);
+    model = glm::mat4(1.0f);
+    glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+    glUniform1i(uniformIsFlatShading, 0);
+    glBindVertexArray(planeVAO);
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+    glBindVertexArray(0);
 }
 
 void createShaders(){
