@@ -80,15 +80,16 @@ void Shader::compileShader(const char *vertexCode, const char *fragmentCode) {
     uniformProjection = glGetUniformLocation(shaderID, "projection");
     uniformView = glGetUniformLocation(shaderID, "view");
     uniformColor = glGetUniformLocation(shaderID, "color");
-    uniformLightColor = glGetUniformLocation(shaderID, "light.lightColor");
-    uniformLightPosition = glGetUniformLocation(shaderID, "light.lightPosition");
-    uniformAmbientIntensity = glGetUniformLocation(shaderID, "light.ambientIntensity");
-    uniformDiffuseIntensity = glGetUniformLocation(shaderID, "light.diffuseIntensity");
     uniformCameraPosition = glGetUniformLocation(shaderID, "cameraPosition");
     uniformSpecularIntensity = glGetUniformLocation(shaderID, "material.specularIntensity");
     uniformShininess = glGetUniformLocation(shaderID, "material.shininess");
     uniformIsFlatShading = glGetUniformLocation(shaderID, "isFlatShading");
     uniformTriangleNormal = glGetUniformLocation(shaderID, "triangleNormal");
+
+    uniformPointLight.uniformLightColor = glGetUniformLocation(shaderID, "pointLight.light.lightColor");
+    uniformPointLight.uniformLightPosition = glGetUniformLocation(shaderID, "pointLight.lightPosition");
+    uniformPointLight.uniformAmbientIntensity = glGetUniformLocation(shaderID, "pointLight.light.ambientIntensity");
+    uniformPointLight.uniformDiffuseIntensity = glGetUniformLocation(shaderID, "pointLight.light.diffuseIntensity");
 
     uniformLightDirection = glGetUniformLocation(shaderID, "lightDirection");
 }
@@ -109,22 +110,6 @@ GLuint Shader::getColorLocation(){
     return uniformColor;
 }
 
-GLuint Shader::getLightColorLocation(){
-    return uniformLightColor;
-}
-
-GLuint Shader::getLightPositionLocation(){
-    return uniformLightPosition;
-}
-
-GLuint Shader::getAmbientIntensityLocation(){
-    return uniformAmbientIntensity;
-}
-
-GLuint Shader::getDiffuseIntensityLocation(){
-    return uniformDiffuseIntensity;
-}
-
 GLuint Shader::getCameraPositionLocation(){
     return uniformCameraPosition;
 }
@@ -137,15 +122,31 @@ GLuint Shader::getShininessLocation(){
     return uniformShininess;
 }
 
-GLuint Shader::getLightDirectionLocation(){
-    return uniformLightDirection;
-}
-
 GLuint Shader::getIsFlatShadingLocation(){
     return uniformIsFlatShading;
 }
 GLuint Shader::getTriangleNormalLocation(){
     return uniformTriangleNormal;
+}
+
+GLuint Shader::getPointLightColorLocation(){
+    return uniformPointLight.uniformLightColor;
+}
+
+GLuint Shader::getPointLightPositionLocation(){
+    return uniformPointLight.uniformLightPosition;
+}
+
+GLuint Shader::getPointLightAmbientIntensityLocation(){
+    return uniformPointLight.uniformAmbientIntensity;
+}
+
+GLuint Shader::getPointLightDiffuseIntensityLocation(){
+    return uniformPointLight.uniformDiffuseIntensity;
+}
+
+GLuint Shader::getLightDirectionLocation(){
+    return uniformLightDirection;
 }
 
 void Shader::useShader() {

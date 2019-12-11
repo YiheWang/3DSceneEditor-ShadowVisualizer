@@ -144,14 +144,17 @@ int main()
     GLuint uniformColor = 0;
     GLuint uniformView = 0;
     GLuint uniformCameraPosition = 0;
-    GLuint uniformSpecularIntensity = 0;
-    GLuint uniformShininess = 0;
-    GLuint uniformLightColor = 0;
-    GLuint uniformLightPosition = 0;
-    GLuint uniformAmbientIntensity = 0;
-    GLuint uniformDiffuseIntensity = 0;
     GLuint uniformIsFlatShading = 0;
     GLuint uniformTriangleNormal = 0;
+    GLuint uniformShininess = 0;
+    GLuint uniformSpecularIntensity = 0;
+
+    struct UniformPointLight{
+        GLuint uniformLightColor = 0;
+        GLuint uniformLightPosition = 0;
+        GLuint uniformAmbientIntensity = 0;
+        GLuint uniformDiffuseIntensity = 0;
+    }uniformPointLight;
 
     float ratio = (float)bufferWidth / (float)bufferHeight;
     //projection = glm::ortho(-1.0f * ratio, 1.0f * ratio, -1.0f, 1.0f, 0.1f, 100.0f);
@@ -184,17 +187,18 @@ int main()
         uniformColor = shaderList[0].getColorLocation();
         uniformView = shaderList[0].getViewLocation();
         uniformCameraPosition = shaderList[0].getCameraPositionLocation();
-        uniformAmbientIntensity = shaderList[0].getAmbientIntensityLocation();
-        uniformDiffuseIntensity = shaderList[0].getDiffuseIntensityLocation();
-        uniformLightColor = shaderList[0].getLightColorLocation();
-        uniformLightPosition = shaderList[0].getLightPositionLocation();
         uniformSpecularIntensity = shaderList[0].getSpecularIntensityLocation();
         uniformShininess = shaderList[0].getShininessLocation();
         uniformIsFlatShading = shaderList[0].getIsFlatShadingLocation();
         uniformTriangleNormal = shaderList[0].getTriangleNormalLocation();
 
-        pointLight.useLight(uniformLightColor, uniformAmbientIntensity,
-                uniformDiffuseIntensity, uniformLightPosition);
+        uniformPointLight.uniformAmbientIntensity = shaderList[0].getPointLightAmbientIntensityLocation();
+        uniformPointLight.uniformDiffuseIntensity = shaderList[0].getPointLightDiffuseIntensityLocation();
+        uniformPointLight.uniformLightColor = shaderList[0].getPointLightColorLocation();
+        uniformPointLight.uniformLightPosition = shaderList[0].getPointLightPositionLocation();
+
+        pointLight.useLight(uniformPointLight.uniformLightColor, uniformPointLight.uniformAmbientIntensity,
+                            uniformPointLight.uniformDiffuseIntensity, uniformPointLight.uniformLightPosition);
         material.useMaterial(uniformSpecularIntensity, uniformShininess);
 
         glUniformMatrix4fv(uniformProjection, 1, GL_FALSE, glm::value_ptr(projection));
@@ -236,14 +240,14 @@ void handleKeys(GLFWwindow* window, int key, int code, int action, int mode){
         case GLFW_KEY_1:
             if(action == GLFW_PRESS){
                 Mesh *mesh = new Mesh();
-                mesh->createMesh(verticesOfUnitCube, indicesOfUnitCube, "UnitCube", 1);
+                mesh->createMesh(verticesOfUnitCube, indicesOfUnitCube, "UnitCube", 3);
                 meshList.push_back(mesh);
             }
             break;
         case GLFW_KEY_2:
             if(action == GLFW_PRESS){
                 Mesh *mesh = new Mesh();
-                mesh->createMesh(verticesOfBumpyCube, indicesOfBumpyCube, "BumpyCube", 1);
+                mesh->createMesh(verticesOfBumpyCube, indicesOfBumpyCube, "BumpyCube", 3);
                 mesh->translation(-mesh->getBarycenter());
                 mesh->scaling(0.1f, 0.1f, 0.1f);
                 meshList.push_back(mesh);
@@ -252,7 +256,7 @@ void handleKeys(GLFWwindow* window, int key, int code, int action, int mode){
         case GLFW_KEY_3:
             if(action == GLFW_PRESS){
                 Mesh *mesh = new Mesh();
-                mesh->createMesh(verticesOfBunny, indicesOfBunny, "Bunny", 1);
+                mesh->createMesh(verticesOfBunny, indicesOfBunny, "Bunny", 3);
                 mesh->translation(-mesh->getBarycenter());
                 mesh->scaling(4.0f, 4.0f, 4.0f);
                 meshList.push_back(mesh);

@@ -9,9 +9,13 @@ uniform vec3 color;
 
 struct Light{
 	vec3 lightColor;
-	vec3 lightPosition;
 	float ambientIntensity;
 	float diffuseIntensity;
+};
+
+struct PointLight{
+    Light light;
+    vec3 lightPosition;
 };
 
 struct Material{
@@ -19,7 +23,7 @@ struct Material{
 	float shininess;
 };
 
-uniform Light light;
+uniform PointLight pointLight;
 uniform Material material;
 
 uniform vec3 cameraPosition;
@@ -46,10 +50,10 @@ vec4 calcLightByDirection(Light light, vec3 direction){
 }
 
 vec4 calcPointLight(){
-	vec3 direction = light.lightPosition - FragPos;
+	vec3 direction = pointLight.lightPosition - FragPos;
 	direction = normalize(direction);
 
-	vec4 color = calcLightByDirection(light, direction);
+	vec4 color = calcLightByDirection(pointLight.light, direction);
 	return color;
 }
 

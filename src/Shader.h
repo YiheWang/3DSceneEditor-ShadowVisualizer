@@ -19,15 +19,17 @@ public:
     GLuint getModelLocation();
     GLuint getViewLocation();
     GLuint getColorLocation();
-    GLuint getLightColorLocation();
-    GLuint getLightPositionLocation();
-    GLuint getAmbientIntensityLocation();
-    GLuint getDiffuseIntensityLocation();
     GLuint getCameraPositionLocation();
     GLuint getSpecularIntensityLocation();
     GLuint getShininessLocation();
     GLuint getIsFlatShadingLocation();
     GLuint getTriangleNormalLocation();
+
+    GLuint getPointLightColorLocation();
+    GLuint getPointLightPositionLocation();
+    GLuint getPointLightAmbientIntensityLocation();
+    GLuint getPointLightDiffuseIntensityLocation();
+
 
     GLuint getLightDirectionLocation();
 
@@ -41,15 +43,18 @@ private:
     GLuint uniformModel;
     GLuint uniformView;
     GLuint uniformColor;
-    GLuint uniformLightColor;
-    GLuint uniformLightPosition;
-    GLuint uniformAmbientIntensity;
-    GLuint uniformDiffuseIntensity;
     GLuint uniformCameraPosition;
     GLuint uniformSpecularIntensity;
     GLuint uniformShininess;
     GLuint uniformIsFlatShading;
     GLuint uniformTriangleNormal;
+
+    struct {
+        GLuint uniformLightColor;
+        GLuint uniformLightPosition;
+        GLuint uniformAmbientIntensity;
+        GLuint uniformDiffuseIntensity;
+    }uniformPointLight;
 
     GLuint uniformLightDirection;
 

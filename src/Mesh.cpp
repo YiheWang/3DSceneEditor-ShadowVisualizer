@@ -11,7 +11,7 @@ Mesh::Mesh() {
     indexCount = 0;
     meshName = "";
     model = glm::mat4(1.0f);
-    renderWay = 1;
+    renderWay = 3;
 
     barycenter = glm::vec3(0.0f);
 }
