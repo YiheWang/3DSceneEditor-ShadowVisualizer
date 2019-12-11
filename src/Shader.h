@@ -30,8 +30,10 @@ public:
     GLuint getPointLightAmbientIntensityLocation();
     GLuint getPointLightDiffuseIntensityLocation();
 
-
-    GLuint getLightDirectionLocation();
+    GLuint getDirectionalLightColorLocation();
+    GLuint getDirectionalLightDirectionLocation();
+    GLuint getDirectionalLightAmbientIntensityLocation();
+    GLuint getDirectionalLightDiffuseIntensityLocation();
 
     void useShader();
     void clearShader();
@@ -56,7 +58,12 @@ private:
         GLuint uniformDiffuseIntensity;
     }uniformPointLight;
 
-    GLuint uniformLightDirection;
+    struct {
+        GLuint uniformLightColor;
+        GLuint uniformLightDirection;
+        GLuint uniformAmbientIntensity;
+        GLuint uniformDiffuseIntensity;
+    }uniformDirectionalLight;
 
     void compileShader(const char* vertexCode, const char* fragmentCode);
     void addShader(GLuint theProgram, const char* shaderCode, GLenum shaderType);

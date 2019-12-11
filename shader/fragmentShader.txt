@@ -44,10 +44,10 @@ vec4 calcLightByDirection(Light light, vec3 direction){
 
 	if(diffuseFactor > 0.0f)
 	{
-		vec3 fragToCamera = normalize(cameraPosition - FragPos);
+		vec3 cameraToFrag = normalize(cameraPosition - FragPos);
 		vec3 reflectedVertex = normalize(reflect(-direction, normalize(Normal)));
 
-		float specularFactor = max(dot(fragToCamera, reflectedVertex), 0.0f);
+		float specularFactor = max(dot(cameraToFrag, reflectedVertex), 0.0f);
 		specularFactor = pow(specularFactor, material.shininess);
 		specularColor = vec4(light.lightColor * material.specularIntensity * specularFactor, 1.0f);
 	}
@@ -57,6 +57,7 @@ vec4 calcLightByDirection(Light light, vec3 direction){
 
 vec4 calcPointLight(){
 	vec3 direction = pointLight.lightPosition - FragPos;
+	// point from fragment to light source
 	direction = normalize(direction);
 
 	vec4 color = calcLightByDirection(pointLight.light, direction);
@@ -64,7 +65,8 @@ vec4 calcPointLight(){
 }
 
 vec4 calcDirectionalLight(){
-	return calcLightByDirection(directionalLight.light, directionalLight.lightDirection);
+	return calcLightByDirection(directionalLight.light, normalize(-directionalLight.lightDirection));
+	//from fragment to light source
 }
 
 void main()

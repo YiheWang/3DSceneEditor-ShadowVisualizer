@@ -8,6 +8,7 @@
 #include "Material.h"
 #include "Light.h"
 #include "PointLight.h"
+#include "DirectionalLight.h"
 
 using namespace std;
 
@@ -20,6 +21,7 @@ GLint bufferHeight = 0;
 //Window mainWindow;
 Camera camera;
 PointLight pointLight;
+DirectionalLight directionalLight;
 Material material;
 
 vector<Mesh*> meshList;
@@ -138,6 +140,9 @@ int main()
     pointLight = PointLight(1.0f, 1.0f, 1.0f,
                   0.1f, 0.6f,
                   -5.0f, 5.0f, 5.0f);
+    directionalLight = DirectionalLight(1.0f, 1.0f, 1.0f,
+                  0.1f, 0.6f,
+                  -1.0f, 1.0f, 0.0f);
 
     GLuint uniformProjection = 0;
     GLuint uniformModel = 0;
@@ -155,6 +160,13 @@ int main()
         GLuint uniformAmbientIntensity = 0;
         GLuint uniformDiffuseIntensity = 0;
     }uniformPointLight;
+
+    struct UniformDirectionalLight{
+        GLuint uniformLightColor = 0;
+        GLuint uniformLightDirection = 0;
+        GLuint uniformAmbientIntensity = 0;
+        GLuint uniformDiffuseIntensity = 0;
+    }uniformDirectionalLight;
 
     float ratio = (float)bufferWidth / (float)bufferHeight;
     //projection = glm::ortho(-1.0f * ratio, 1.0f * ratio, -1.0f, 1.0f, 0.1f, 100.0f);
@@ -197,8 +209,16 @@ int main()
         uniformPointLight.uniformLightColor = shaderList[0].getPointLightColorLocation();
         uniformPointLight.uniformLightPosition = shaderList[0].getPointLightPositionLocation();
 
+        uniformDirectionalLight.uniformAmbientIntensity = shaderList[0].getDirectionalLightAmbientIntensityLocation();
+        uniformDirectionalLight.uniformDiffuseIntensity = shaderList[0].getDirectionalLightDiffuseIntensityLocation();
+        uniformDirectionalLight.uniformLightColor = shaderList[0].getDirectionalLightColorLocation();
+        uniformDirectionalLight.uniformLightDirection = shaderList[0].getDirectionalLightDirectionLocation();
+
         pointLight.useLight(uniformPointLight.uniformLightColor, uniformPointLight.uniformAmbientIntensity,
-                            uniformPointLight.uniformDiffuseIntensity, uniformPointLight.uniformLightPosition);
+                           uniformPointLight.uniformDiffuseIntensity, uniformPointLight.uniformLightPosition);
+        directionalLight.useLight(uniformDirectionalLight.uniformLightColor, uniformDirectionalLight.uniformAmbientIntensity,
+                uniformDirectionalLight.uniformDiffuseIntensity, uniformDirectionalLight.uniformLightDirection);
+
         material.useMaterial(uniformSpecularIntensity, uniformShininess);
 
         glUniformMatrix4fv(uniformProjection, 1, GL_FALSE, glm::value_ptr(projection));
