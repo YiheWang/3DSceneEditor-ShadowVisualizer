@@ -18,12 +18,18 @@ struct PointLight{
     vec3 lightPosition;
 };
 
+struct DirectionalLight{
+	Light light;
+	vec3 lightDirection;
+};
+
 struct Material{
 	float specularIntensity;
 	float shininess;
 };
 
 uniform PointLight pointLight;
+uniform DirectionalLight directionalLight;
 uniform Material material;
 
 uniform vec3 cameraPosition;
@@ -57,8 +63,13 @@ vec4 calcPointLight(){
 	return color;
 }
 
+vec4 calcDirectionalLight(){
+	return calcLightByDirection(directionalLight.light, directionalLight.lightDirection);
+}
+
 void main()
 {
     vec4 finalColor = calcPointLight();
+    finalColor += calcDirectionalLight();
     outColor = vec4(color, 1.0f) * finalColor;
 }
