@@ -10,6 +10,9 @@
 #include "PointLight.h"
 #include "DirectionalLight.h"
 #include "Plane.h"
+#include "Texture.h"
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"
 
 using namespace std;
 
@@ -25,6 +28,7 @@ PointLight pointLight;
 DirectionalLight directionalLight;
 Material material;
 Plane plane;
+//Texture floorTexture;
 
 vector<Mesh*> meshList;
 vector<Shader> shaderList;
@@ -132,6 +136,8 @@ int main()
     loadFile();
     //createObjects();
     plane.createPlane();
+    //floorTexture = Texture("../Texture/floor.png");
+    //floorTexture.loadTexture();
 
     camera = Camera(glm::vec3(0.0f, 0.0f, 3.0f), glm::vec3(0.0f, 1.0f, 0.0f),
             0.872665f, 1.0f); // move 10 degree every time unit
@@ -142,7 +148,7 @@ int main()
                   -5.0f, 5.0f, 5.0f);
     directionalLight = DirectionalLight(1.0f, 1.0f, 1.0f,
                   0.1f, 0.6f,
-                  -1.0f, 1.0f, 0.0f);
+                  1.0f, -1.0f, 0.0f);
 
     GLuint uniformProjection = 0;
     GLuint uniformModel = 0;
@@ -225,7 +231,9 @@ int main()
         glUniformMatrix4fv(uniformView, 1, GL_FALSE, glm::value_ptr(camera.calculateViewMatrix()));
         glUniform3f(uniformCameraPosition, camera.getCameraPosition().x, camera.getCameraPosition().y, camera.getCameraPosition().z);
 
+        //floorTexture.useTexture();
         plane.renderPlane(uniformModel, uniformIsFlatShading, uniformColor);
+        //floorTexture.clearTexture();
         for(int i = 0; i < meshList.size(); ++i){
             if(mouseClickMeshIndex == i){
                 glUniform3f(uniformColor, 0.0f, 0.0f, 1.0f);
