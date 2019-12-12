@@ -5,13 +5,16 @@
 #include "Editor.h"
 using namespace std;
 
-Vertex createVertex(float x, float y, float z, float R, float G, float B, float normalX, float normalY, float normalZ){
+Vertex createVertex(float x, float y, float z, float R, float G, float B,
+        float normalX, float normalY, float normalZ, float texCoordX, float texCoordY){
     Vertex vertex;
     vertex.x = x; vertex.y = y; vertex.z = z;
     vertex.R = R; vertex.G = G; vertex.B = B;
     vertex.normalX = normalX;
     vertex.normalY = normalY;
     vertex.normalZ = normalZ;
+    vertex.texCoordX = texCoordX;
+    vertex.texCoordY = texCoordY;
 
     return vertex;
 }
@@ -49,7 +52,19 @@ void readOffFile(vector<TriangleVertexIndex> &indices, vector<Vertex> &vertices,
         stringstream word(line);//separate the line by whitespace
         float x, y, z;
         word >> x >> y >> z;//x, y, z
-        vertices.push_back(createVertex(x, y, z, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f));
+        // vertex is first vertex of triangle
+        if(i % 3 == 0){
+            vertices.push_back(createVertex(x, y, z, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f));
+        }
+        // vertex is second vertex of triangle
+        else if(i % 3 == 1){
+            vertices.push_back(createVertex(x, y, z, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f));
+        }
+        // vertex is third vertex of triangle
+        else {
+            vertices.push_back(createVertex(x, y, z, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.5f, 1.0f));
+        }
+
     }
     for (int j = 0; j < indicesNum; ++j) {
         in.getline(line, sizeof(line), '\n');//read one line

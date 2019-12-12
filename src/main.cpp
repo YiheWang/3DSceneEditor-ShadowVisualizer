@@ -47,8 +47,6 @@ bool keys[1024];
 
 int mouseClickMeshIndex = -1;
 
-GLuint planeVAO, planeVBO;
-
 // Vertex Shader
 static const char* vShader = "../Shader/vertexShader.txt";
 //fragment shader

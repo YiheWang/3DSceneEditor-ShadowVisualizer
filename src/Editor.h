@@ -11,9 +11,11 @@ typedef struct Vertex{
     float x, y, z;
     float R, G, B;
     float normalX, normalY, normalZ;
+    float texCoordX, texCoordY;
 }Vertex;
 
-Vertex createVertex(float x, float y, float z, float R, float G, float B, float normalX, float normalY, float normalZ);
+Vertex createVertex(float x, float y, float z, float R, float G, float B,
+        float normalX, float normalY, float normalZ, float texCoordX, float texCoordY);
 
 typedef struct TriangleVertexIndex{
     unsigned int vertexIndex1;
