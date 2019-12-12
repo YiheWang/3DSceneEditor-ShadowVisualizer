@@ -31,7 +31,7 @@ public:
     void renderMeshWithWireframe(GLuint uniformModel, GLuint uniformIsFlatShading);
     void renderMeshWithFlatShading(GLuint uniformModel, GLuint uniformTriangleNormal, GLuint uniformIsFlatShading);
     void renderMeshWithPhongShading(GLuint uniformModel, GLuint uniformIsFlatShading);
-    void renderMesh(GLuint uniformModel, GLuint uniformTriangleNormal, GLuint uniformIsFlatShading);
+    void renderMesh(GLuint uniformModel, GLuint uniformTriangleNormal, GLuint uniformIsFlatShading, GLuint uniformIfUsingTexture);
 
     double findTOfRayIntersectWithMesh(glm::vec3 rayOrigin, glm::vec3 rayDirection);
 

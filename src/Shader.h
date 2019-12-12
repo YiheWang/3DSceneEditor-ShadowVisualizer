@@ -24,6 +24,7 @@ public:
     GLuint getShininessLocation();
     GLuint getIsFlatShadingLocation();
     GLuint getTriangleNormalLocation();
+    GLuint getIfUsingTextureLocation();
 
     GLuint getPointLightColorLocation();
     GLuint getPointLightPositionLocation();
@@ -50,6 +51,7 @@ private:
     GLuint uniformShininess;
     GLuint uniformIsFlatShading;
     GLuint uniformTriangleNormal;
+    GLuint uniformifUsingTexture;
 
     struct {
         GLuint uniformLightColor;

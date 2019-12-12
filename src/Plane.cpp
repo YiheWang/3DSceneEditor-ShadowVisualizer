@@ -46,7 +46,8 @@ void Plane::createPlane(){
     glBindVertexArray(0);
 }
 
-void Plane::renderPlane(GLuint uniformModel, GLuint uniformIsFlatShading, GLuint uniformColor){
+void Plane::renderPlane(GLuint uniformModel, GLuint uniformIsFlatShading, GLuint uniformColor, GLuint uniformIfUsingTexture){
+    glUniform1i(uniformIfUsingTexture, 1);
     glUniform3f(uniformColor, 1.0f, 1.0f, 1.0f);
     glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
     glUniform1i(uniformIsFlatShading, 0);

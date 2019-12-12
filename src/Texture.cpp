@@ -40,6 +40,7 @@ void Texture::loadTexture()
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, texData);
+    //be care about image format, some images may not have alpha channel. This will cause an issue
     glGenerateMipmap(GL_TEXTURE_2D);
 
     glBindTexture(GL_TEXTURE_2D, 0);
@@ -51,6 +52,10 @@ void Texture::useTexture()
 {
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, textureID);
+}
+
+void Texture::disableTexture(){
+    glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 void Texture::clearTexture()

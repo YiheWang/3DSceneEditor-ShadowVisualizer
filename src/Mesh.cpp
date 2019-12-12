@@ -130,7 +130,8 @@ void Mesh::renderMeshWithFlatShading(GLuint uniformModel, GLuint uniformTriangle
     glBindVertexArray(0);
 }
 
-void Mesh::renderMesh(GLuint uniformModel, GLuint uniformTriangleNormal, GLuint uniformIsFlatShading){
+void Mesh::renderMesh(GLuint uniformModel, GLuint uniformTriangleNormal, GLuint uniformIsFlatShading, GLuint uniformIfUsingTexture){
+    glUniform1i(uniformIfUsingTexture, 0);
     if(renderWay == 1){
         renderMeshWithWireframe(uniformModel, uniformIsFlatShading);
     }

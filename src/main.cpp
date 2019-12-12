@@ -28,7 +28,7 @@ PointLight pointLight;
 DirectionalLight directionalLight;
 Material material;
 Plane plane;
-//Texture floorTexture;
+Texture brickTexture;
 
 vector<Mesh*> meshList;
 vector<Shader> shaderList;
@@ -136,8 +136,8 @@ int main()
     loadFile();
     //createObjects();
     plane.createPlane();
-    //floorTexture = Texture("../Texture/floor.png");
-    //floorTexture.loadTexture();
+    brickTexture = Texture("../Texture/brick.png");
+    brickTexture.loadTexture();
 
     camera = Camera(glm::vec3(0.0f, 0.0f, 3.0f), glm::vec3(0.0f, 1.0f, 0.0f),
             0.872665f, 1.0f); // move 10 degree every time unit
@@ -148,7 +148,7 @@ int main()
                   -5.0f, 5.0f, 5.0f);
     directionalLight = DirectionalLight(1.0f, 1.0f, 1.0f,
                   0.1f, 0.6f,
-                  1.0f, -1.0f, 0.0f);
+                  1.0f, -1.0f, 3.0f);
 
     GLuint uniformProjection = 0;
     GLuint uniformModel = 0;
@@ -159,6 +159,7 @@ int main()
     GLuint uniformTriangleNormal = 0;
     GLuint uniformShininess = 0;
     GLuint uniformSpecularIntensity = 0;
+    GLuint uniformIfUsingTexture = 0;
 
     struct UniformPointLight{
         GLuint uniformLightColor = 0;
@@ -209,6 +210,7 @@ int main()
         uniformShininess = shaderList[0].getShininessLocation();
         uniformIsFlatShading = shaderList[0].getIsFlatShadingLocation();
         uniformTriangleNormal = shaderList[0].getTriangleNormalLocation();
+        uniformIfUsingTexture = shaderList[0].getIfUsingTextureLocation();
 
         uniformPointLight.uniformAmbientIntensity = shaderList[0].getPointLightAmbientIntensityLocation();
         uniformPointLight.uniformDiffuseIntensity = shaderList[0].getPointLightDiffuseIntensityLocation();
@@ -231,18 +233,17 @@ int main()
         glUniformMatrix4fv(uniformView, 1, GL_FALSE, glm::value_ptr(camera.calculateViewMatrix()));
         glUniform3f(uniformCameraPosition, camera.getCameraPosition().x, camera.getCameraPosition().y, camera.getCameraPosition().z);
 
-        //floorTexture.useTexture();
-        plane.renderPlane(uniformModel, uniformIsFlatShading, uniformColor);
-        //floorTexture.clearTexture();
+        brickTexture.useTexture();
+        plane.renderPlane(uniformModel, uniformIsFlatShading, uniformColor, uniformIfUsingTexture);
         for(int i = 0; i < meshList.size(); ++i){
             if(mouseClickMeshIndex == i){
                 glUniform3f(uniformColor, 0.0f, 0.0f, 1.0f);
-                meshList[i]->renderMesh(uniformModel, uniformTriangleNormal, uniformIsFlatShading);
+                meshList[i]->renderMesh(uniformModel, uniformTriangleNormal, uniformIsFlatShading, uniformIfUsingTexture);
                 //meshList[i]->renderMeshWithPhongShading(uniformModel, uniformIsFlatShading);
             }
             else {
                 glUniform3f(uniformColor, 1.0f, 0.0f, 0.0f);
-                meshList[i]->renderMesh(uniformModel, uniformTriangleNormal, uniformIsFlatShading);
+                meshList[i]->renderMesh(uniformModel, uniformTriangleNormal, uniformIsFlatShading, uniformIfUsingTexture);
             }
         }
 

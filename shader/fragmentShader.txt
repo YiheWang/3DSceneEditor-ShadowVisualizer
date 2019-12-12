@@ -34,6 +34,8 @@ uniform DirectionalLight directionalLight;
 uniform Material material;
 uniform sampler2D theTexture;
 
+uniform int ifUsingTexture;
+
 uniform vec3 cameraPosition;
 
 vec4 calcLightByDirection(Light light, vec3 direction){
@@ -75,8 +77,12 @@ void main()
 {
     vec4 finalColor = calcPointLight();
     finalColor += calcDirectionalLight();
-    //outColor = vColor * vec4(color, 1.0f) * texture(theTexture, TexCoord) * finalColor;
-    outColor = vColor * vec4(color, 1.0f) * finalColor;
-    // vertex color * uniform color * texture color * light color
-    //outColor = vec4(color, 1.0f) * finalColor;
+    if(ifUsingTexture == 1){
+        outColor = vColor * vec4(color, 1.0f) * texture(theTexture, TexCoord) * finalColor;
+    }
+    else if(ifUsingTexture == 0){
+        outColor = vColor * vec4(color, 1.0f) * finalColor;
+    }
+
+    // this represents vertex color * uniform color * texture color * light color
 }

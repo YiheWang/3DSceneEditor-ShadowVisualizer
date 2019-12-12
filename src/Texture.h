@@ -16,6 +16,7 @@ public:
 
     void loadTexture();
     void useTexture();
+    void disableTexture();
     void clearTexture();
 
     ~Texture();
