@@ -54,15 +54,15 @@ void readOffFile(vector<TriangleVertexIndex> &indices, vector<Vertex> &vertices,
         word >> x >> y >> z;//x, y, z
         // vertex is first vertex of triangle
         if(i % 3 == 0){
-            vertices.push_back(createVertex(x, y, z, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f));
+            vertices.push_back(createVertex(x, y, z, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f));
         }
         // vertex is second vertex of triangle
         else if(i % 3 == 1){
-            vertices.push_back(createVertex(x, y, z, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f));
+            vertices.push_back(createVertex(x, y, z, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f));
         }
         // vertex is third vertex of triangle
         else {
-            vertices.push_back(createVertex(x, y, z, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.5f, 1.0f));
+            vertices.push_back(createVertex(x, y, z, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.5f, 1.0f));
         }
 
     }
