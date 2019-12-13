@@ -4,6 +4,7 @@ in vec4 vColor;
 in vec3 Normal;
 in vec3 FragPos;
 in vec2 TexCoord;
+in vec4 DirectionalLightSpacePos;
 
 out vec4 outColor;
 uniform vec3 color;
@@ -32,13 +33,30 @@ struct Material{
 uniform PointLight pointLight;
 uniform DirectionalLight directionalLight;
 uniform Material material;
-uniform sampler2D theTexture;
+
+uniform sampler2D theTexture; // TEXTURE0
+uniform sampler2D directionalShadowMap; //TEXTURE1
 
 uniform int ifUsingTexture;
 
 uniform vec3 cameraPosition;
 
-vec4 calcLightByDirection(Light light, vec3 direction){
+float calcDirectionalShadowMapFactor(DirectionalLight light)
+{
+    vec3 projectedCoords = DirectionalLightSpacePos.xyz / DirectionalLightSpacePos.w;
+    //in vertex shader, gl_position automatically did this for us
+    projectedCoords = (projectedCoords * 0.5) + 0.5;
+    // change range from -1, 1 to 0, 1
+
+    float closestDepth = texture(directionalShadowMap, projectedCoords.xy).r;
+    float currentDepth = projectedCoords.z;
+
+    float shadow = currentDepth > closestDepth ? 1.0 : 0.0;
+
+    return shadow;
+}
+
+vec4 calcLightByDirection(Light light, vec3 direction, float shadowFactor){
 	vec4 ambientColor = vec4(light.lightColor, 1.0f) * light.ambientIntensity;
 
 	float diffuseFactor = max(dot(normalize(Normal), normalize(direction)), 0.0f);
@@ -56,7 +74,7 @@ vec4 calcLightByDirection(Light light, vec3 direction){
 		specularColor = vec4(light.lightColor * material.specularIntensity * specularFactor, 1.0f);
 	}
 
-	return (ambientColor + diffuseColor + specularColor);
+	return (ambientColor + (1 - shadowFactor) * (diffuseColor + specularColor));
 }
 
 vec4 calcPointLight(){
@@ -64,12 +82,13 @@ vec4 calcPointLight(){
 	// point from fragment to light source
 	direction = normalize(direction);
 
-	vec4 color = calcLightByDirection(pointLight.light, direction);
+	vec4 color = calcLightByDirection(pointLight.light, direction, 0.0f);
 	return color;
 }
 
 vec4 calcDirectionalLight(){
-	return calcLightByDirection(directionalLight.light, normalize(-directionalLight.lightDirection));
+    float shadowFactor = calcDirectionalShadowMapFactor(directionalLight);
+	return calcLightByDirection(directionalLight.light, normalize(-directionalLight.lightDirection), shadowFactor);
 	//from fragment to light source
 }
 
@@ -77,6 +96,7 @@ void main()
 {
     vec4 finalColor = calcPointLight();
     finalColor += calcDirectionalLight();
+    //vec4 finalColor = calcDirectionalLight();
     if(ifUsingTexture == 1){
         outColor = vColor * vec4(color, 1.0f) * texture(theTexture, TexCoord) * finalColor;
     }

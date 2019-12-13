@@ -32,6 +32,7 @@ Texture brickTexture;
 
 vector<Mesh*> meshList;
 vector<Shader> shaderList;
+Shader directionalShadowShader;
 
 vector<TriangleVertexIndex> indicesOfBunny;
 vector<Vertex> verticesOfBunny;
@@ -55,6 +56,9 @@ int mouseClickMeshIndex = -1;
 static const char* vShader = "../Shader/vertexShader.txt";
 //fragment shader
 static const char* fShader = "../Shader/fragmentShader.txt";
+
+static const char* directionalShadowMapVShader = "../Shader/directionalShadowMapVertexShader.txt";
+static const char* directionalShadowMapFShader = "../Shader/directionalShadowMapFragmentShader.txt";
 
 string bumpyCube = "../meshFile/bumpy_cube.off";
 string bunny = "../meshFile/bunny.off";
@@ -143,9 +147,9 @@ int main()
             0.872665f, 1.0f); // move 10 degree every time unit
 
     material = Material(1.0f, 132);
-    pointLight = PointLight(1.0f, 1.0f, 1.0f,
+    /*pointLight = PointLight(1.0f, 1.0f, 1.0f,
                   0.1f, 0.6f,
-                  -5.0f, 5.0f, 5.0f);
+                  -5.0f, 5.0f, 5.0f);*/
     directionalLight = DirectionalLight(1.0f, 1.0f, 1.0f,
                   0.1f, 0.6f,
                   1.0f, -1.0f, 3.0f);
@@ -540,6 +544,9 @@ void createShaders(){
     Shader *shader1 = new Shader();
     shader1->createFromFiles(vShader, fShader);
     shaderList.push_back(*shader1);
+
+    directionalShadowShader = Shader();
+    directionalShadowShader.createFromFiles(directionalShadowMapVShader, directionalShadowMapFShader);
 }
 
 void loadFile(){

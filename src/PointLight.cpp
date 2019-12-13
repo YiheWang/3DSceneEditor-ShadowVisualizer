@@ -10,7 +10,7 @@ PointLight::PointLight() : Light(){
 
 PointLight::PointLight(GLfloat red, GLfloat green, GLfloat blue,
                     GLfloat ambientIntensity, GLfloat diffuseIntensity,
-                    GLfloat x, GLfloat y, GLfloat z) : Light(red, green, blue, ambientIntensity, diffuseIntensity){
+                    GLfloat x, GLfloat y, GLfloat z) : Light(1024, 1024, red, green, blue, ambientIntensity, diffuseIntensity){
     lightPosition = glm::vec3(x, y, z);
 }
 

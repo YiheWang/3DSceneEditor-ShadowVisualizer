@@ -36,6 +36,10 @@ public:
     GLuint getDirectionalLightAmbientIntensityLocation();
     GLuint getDirectionalLightDiffuseIntensityLocation();
 
+    void setTexture(GLuint textureUnit);
+    void setDirectionalShadowMap(GLuint textureUint);
+    void setDirectionalLightTransform(glm::mat4* lightTransform);
+
     void useShader();
     void clearShader();
     ~Shader();
@@ -52,6 +56,9 @@ private:
     GLuint uniformIsFlatShading;
     GLuint uniformTriangleNormal;
     GLuint uniformifUsingTexture;
+    GLuint uniformDirectionalLightTransform;
+    GLuint uniformDirectionalShadowMap;
+    GLuint uniformTexture;
 
     struct {
         GLuint uniformLightColor;
