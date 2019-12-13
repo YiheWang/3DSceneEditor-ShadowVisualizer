@@ -150,9 +150,10 @@ int main()
     /*pointLight = PointLight(1.0f, 1.0f, 1.0f,
                   0.1f, 0.6f,
                   -5.0f, 5.0f, 5.0f);*/
-    directionalLight = DirectionalLight(1.0f, 1.0f, 1.0f,
-                  0.1f, 0.6f,
-                  1.0f, -1.0f, 3.0f);
+    directionalLight = DirectionalLight(1024, 1024,
+            1.0f, 1.0f, 1.0f,
+            0.1f, 0.6f,
+            1.0f, -1.0f, -3.0f);
 
     GLuint uniformProjection = 0;
     GLuint uniformModel = 0;
@@ -197,7 +198,7 @@ int main()
         camera.keyControl(keys, deltaTime);
 
         view = camera.calculateViewMatrix();
-        //update view
+        //update global view, for mouse picking
 
         // Clear window
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
@@ -238,16 +239,13 @@ int main()
         glUniform3f(uniformCameraPosition, camera.getCameraPosition().x, camera.getCameraPosition().y, camera.getCameraPosition().z);
 
         brickTexture.useTexture();
-        plane.renderPlane(uniformModel, uniformIsFlatShading, uniformColor, uniformIfUsingTexture);
+        plane.renderPlane(uniformModel, uniformColor, uniformIfUsingTexture);
         for(int i = 0; i < meshList.size(); ++i){
             if(mouseClickMeshIndex == i){
-                glUniform3f(uniformColor, 0.0f, 0.0f, 1.0f);
-                meshList[i]->renderMesh(uniformModel, uniformTriangleNormal, uniformIsFlatShading, uniformIfUsingTexture);
-                //meshList[i]->renderMeshWithPhongShading(uniformModel, uniformIsFlatShading);
+                meshList[i]->renderMeshWithPhongShading(uniformModel, uniformColor, true, uniformIfUsingTexture);
             }
             else {
-                glUniform3f(uniformColor, 1.0f, 0.0f, 0.0f);
-                meshList[i]->renderMesh(uniformModel, uniformTriangleNormal, uniformIsFlatShading, uniformIfUsingTexture);
+                meshList[i]->renderMeshWithPhongShading(uniformModel, uniformColor, false, uniformIfUsingTexture);
             }
         }
 
@@ -273,14 +271,14 @@ void handleKeys(GLFWwindow* window, int key, int code, int action, int mode){
         case GLFW_KEY_1:
             if(action == GLFW_PRESS){
                 Mesh *mesh = new Mesh();
-                mesh->createMesh(verticesOfUnitCube, indicesOfUnitCube, "UnitCube", 3);
+                mesh->createMesh(verticesOfUnitCube, indicesOfUnitCube, "UnitCube");
                 meshList.push_back(mesh);
             }
             break;
         case GLFW_KEY_2:
             if(action == GLFW_PRESS){
                 Mesh *mesh = new Mesh();
-                mesh->createMesh(verticesOfBumpyCube, indicesOfBumpyCube, "BumpyCube", 3);
+                mesh->createMesh(verticesOfBumpyCube, indicesOfBumpyCube, "BumpyCube");
                 mesh->translation(-mesh->getBarycenter());
                 mesh->scaling(0.1f, 0.1f, 0.1f);
                 meshList.push_back(mesh);
@@ -289,7 +287,7 @@ void handleKeys(GLFWwindow* window, int key, int code, int action, int mode){
         case GLFW_KEY_3:
             if(action == GLFW_PRESS){
                 Mesh *mesh = new Mesh();
-                mesh->createMesh(verticesOfBunny, indicesOfBunny, "Bunny", 3);
+                mesh->createMesh(verticesOfBunny, indicesOfBunny, "Bunny");
                 mesh->translation(-mesh->getBarycenter());
                 mesh->scaling(4.0f, 4.0f, 4.0f);
                 meshList.push_back(mesh);
@@ -463,7 +461,7 @@ void handleKeys(GLFWwindow* window, int key, int code, int action, int mode){
 
 
             //change rendering way
-        case GLFW_KEY_8:
+        /*case GLFW_KEY_8:
             if(action == GLFW_PRESS){
                 if(mouseClickMeshIndex != -1){
                     meshList[mouseClickMeshIndex]->updateRenderWay(1);
@@ -483,7 +481,7 @@ void handleKeys(GLFWwindow* window, int key, int code, int action, int mode){
                     meshList[mouseClickMeshIndex]->updateRenderWay(3);
                 }
             }
-            break;
+            break;*/
 
             //delete mesh
         case GLFW_KEY_DELETE:

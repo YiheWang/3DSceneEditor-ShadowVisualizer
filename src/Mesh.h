@@ -11,8 +11,7 @@
 class Mesh {
 public:
     Mesh();
-
-    void createMesh(std::vector<Vertex> vertices, std::vector<TriangleVertexIndex> indices, std::string meshName, int renderWay);
+    void createMesh(std::vector<Vertex> vertices, std::vector<TriangleVertexIndex> indices, std::string meshName);
 
     void translation(float xTranslate, float yTranslate, float zTranslate);
     void translation(glm::vec3 translation);
@@ -23,15 +22,7 @@ public:
     glm::vec3 getBarycenter();
     glm::mat4 getModel();
     std::string getMeshName() {return meshName;};
-    int getRenderWay(){ return renderWay;};
-    void updateRenderWay(int renderWay){ this->renderWay = renderWay;};
-
-    void keyControl(bool *keys);
-
-    void renderMeshWithWireframe(GLuint uniformModel, GLuint uniformIsFlatShading);
-    void renderMeshWithFlatShading(GLuint uniformModel, GLuint uniformTriangleNormal, GLuint uniformIsFlatShading);
-    void renderMeshWithPhongShading(GLuint uniformModel, GLuint uniformIsFlatShading);
-    void renderMesh(GLuint uniformModel, GLuint uniformTriangleNormal, GLuint uniformIsFlatShading, GLuint uniformIfUsingTexture);
+    void renderMeshWithPhongShading(GLuint uniformModel, GLuint uniformColor, bool ifClicked, GLuint uniformIfUsingTexture);
 
     double findTOfRayIntersectWithMesh(glm::vec3 rayOrigin, glm::vec3 rayDirection);
 
@@ -40,7 +31,6 @@ public:
     ~Mesh();
 
 private:
-    int renderWay;
     std::string meshName;
     GLuint VAO, VBO, IBO;
     GLsizei indexCount;

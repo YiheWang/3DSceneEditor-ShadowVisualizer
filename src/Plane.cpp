@@ -20,13 +20,6 @@ void Plane::createPlane(){
             25.0f, -0.5f,  25.0f,  1.0f, 1.0f, 1.0f,  0.0f, 1.0f, 0.0f,  25.0f,  0.0f,
             -25.0f, -0.5f, -25.0f,  1.0f, 1.0f, 1.0f, 0.0f, 1.0f, 0.0f,   0.0f, 25.0f,
             25.0f, -0.5f, -25.0f,  1.0f, 1.0f, 1.0f,  0.0f, 1.0f, 0.0f,  25.0f, 25.0f
-            /*25.0f, -0.5f,  25.0f,  0.0f, 1.0f, 0.0f,  0.0f, 1.0f, 0.0f,
-            -25.0f, -0.5f,  25.0f,  0.0f, 1.0f, 0.0f,  0.0f, 1.0f, 0.0f,
-            -25.0f, -0.5f, -25.0f,  0.0f, 1.0f, 0.0f,  0.0f, 1.0f, 0.0f,
-
-            25.0f, -0.5f,  25.0f, 0.0f, 1.0f, 0.0f,  0.0f, 1.0f, 0.0f,
-            -25.0f, -0.5f, -25.0f, 0.0f, 1.0f, 0.0f,  0.0f, 1.0f, 0.0f,
-            25.0f, -0.5f, -25.0f, 0.0f, 1.0f, 0.0f,  0.0f, 1.0f, 0.0f*/
     };
 
     glGenVertexArrays(1, &planeVAO);
@@ -46,11 +39,10 @@ void Plane::createPlane(){
     glBindVertexArray(0);
 }
 
-void Plane::renderPlane(GLuint uniformModel, GLuint uniformIsFlatShading, GLuint uniformColor, GLuint uniformIfUsingTexture){
+void Plane::renderPlane(GLuint uniformModel, GLuint uniformColor, GLuint uniformIfUsingTexture){
     glUniform1i(uniformIfUsingTexture, 1);
     glUniform3f(uniformColor, 1.0f, 1.0f, 1.0f);
     glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-    glUniform1i(uniformIsFlatShading, 0);
     glBindVertexArray(planeVAO);
     glDrawArrays(GL_TRIANGLES, 0, 6);
     glBindVertexArray(0);

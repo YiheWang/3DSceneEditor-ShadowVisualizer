@@ -11,18 +11,18 @@ Mesh::Mesh() {
     indexCount = 0;
     meshName = "";
     model = glm::mat4(1.0f);
-    renderWay = 3;
+    //renderWay = 3;
 
     barycenter = glm::vec3(0.0f);
 }
 
-void Mesh::createMesh(std::vector<Vertex> vertices, std::vector<TriangleVertexIndex> indices, std::string meshName, int renderWay){
+void Mesh::createMesh(std::vector<Vertex> vertices, std::vector<TriangleVertexIndex> indices, std::string meshName){
     indexCount = indices.size() * 3;
     barycenter = calculateBaryCenter(vertices, indices);
     this->meshName = meshName;
     this->vertices = vertices;
     this->indices = indices;
-    this->renderWay = renderWay;
+    //this->renderWay = renderWay;
 
     glGenVertexArrays(1, &VAO);
     glBindVertexArray(VAO);
@@ -79,72 +79,21 @@ glm::vec3 Mesh::calculateBaryCenter(std::vector<Vertex> vertices, std::vector<Tr
 }
 
 
-void Mesh::renderMeshWithPhongShading(GLuint uniformModel, GLuint uniformIsFlatShading) {
+void Mesh::renderMeshWithPhongShading(GLuint uniformModel, GLuint uniformColor, bool ifClicked, GLuint uniformIfUsingTexture) {
+    if(ifClicked){
+        glUniform3f(uniformColor, 0.0f, 0.0f, 1.0f);
+    }
+    else {
+        glUniform3f(uniformColor, 1.0f, 0.0f, 0.0f);
+    }
     glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-    glUniform1i(uniformIsFlatShading, 0);
+    glUniform1i(uniformIfUsingTexture, 0);
     glBindVertexArray(VAO);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
     glDrawElements(GL_TRIANGLES, indexCount, GL_UNSIGNED_INT, 0);
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
-}
-
-void Mesh::renderMeshWithWireframe(GLuint uniformModel, GLuint uniformIsFlatShading) {
-    glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-    glUniform1i(uniformIsFlatShading, 0);
-    glBindVertexArray(VAO);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
-    int triangleCount = indexCount / 3;
-    for(int i = 0; i < triangleCount; ++i){
-        glDrawElements(GL_LINE_LOOP, 3, GL_UNSIGNED_INT, (void *)(i * 3 * sizeof(unsigned int)));
-    }
-
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-    glBindVertexArray(0);
-}
-
-void Mesh::renderMeshWithFlatShading(GLuint uniformModel, GLuint uniformTriangleNormal, GLuint uniformIsFlatShading) {
-    glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-    glBindVertexArray(VAO);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
-    int triangleCount = indexCount / 3;
-    for(int i = 0; i < triangleCount; ++i){
-        unsigned int in0 = indices[i].vertexIndex1;
-        unsigned int in1 = indices[i].vertexIndex2;
-        unsigned int in2 = indices[i].vertexIndex3;
-        glm::vec3 v1(vertices[in1].x - vertices[in0].x,
-                     vertices[in1].y - vertices[in0].y,
-                     vertices[in1].z - vertices[in0].z);
-        glm::vec3 v2(vertices[in2].x - vertices[in0].x,
-                     vertices[in2].y - vertices[in0].y,
-                     vertices[in2].z - vertices[in0].z);
-        glm::vec3 normal = glm::cross(v1, v2);
-        normal = glm::normalize(normal);
-        glUniform3f(uniformTriangleNormal, normal.x, normal.y, normal.z);
-        glUniform1i(uniformIsFlatShading, 1);
-        glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, (void *)(i * 3 * sizeof(unsigned int)));
-    }
-
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-    glBindVertexArray(0);
-}
-
-void Mesh::renderMesh(GLuint uniformModel, GLuint uniformTriangleNormal, GLuint uniformIsFlatShading, GLuint uniformIfUsingTexture){
-    glUniform1i(uniformIfUsingTexture, 0);
-    if(renderWay == 1){
-        renderMeshWithWireframe(uniformModel, uniformIsFlatShading);
-    }
-    else if(renderWay == 2){
-        renderMeshWithFlatShading(uniformModel, uniformTriangleNormal, uniformIsFlatShading);
-    }
-    else if(renderWay == 3){
-        renderMeshWithPhongShading(uniformModel, uniformIsFlatShading);
-    }
-}
-
-void Mesh::keyControl(bool *keys){
-
 }
 
 double Mesh::findTOfRayIntersectWithMesh(glm::vec3 worldRayOrigin, glm::vec3 worldRayDirection){

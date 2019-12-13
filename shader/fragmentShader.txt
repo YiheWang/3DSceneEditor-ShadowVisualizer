@@ -87,8 +87,9 @@ vec4 calcPointLight(){
 }
 
 vec4 calcDirectionalLight(){
-    float shadowFactor = calcDirectionalShadowMapFactor(directionalLight);
-	return calcLightByDirection(directionalLight.light, normalize(-directionalLight.lightDirection), shadowFactor);
+    //float shadowFactor = calcDirectionalShadowMapFactor(directionalLight);
+	//return calcLightByDirection(directionalLight.light, normalize(-directionalLight.lightDirection), shadowFactor);
+	return calcLightByDirection(directionalLight.light, normalize(-directionalLight.lightDirection), 0.0f);
 	//from fragment to light source
 }
 
