@@ -213,9 +213,6 @@ int main()
         uniformCameraPosition = shaderList[0].getCameraPositionLocation();
         uniformSpecularIntensity = shaderList[0].getSpecularIntensityLocation();
         uniformShininess = shaderList[0].getShininessLocation();
-        uniformIsFlatShading = shaderList[0].getIsFlatShadingLocation();
-        uniformTriangleNormal = shaderList[0].getTriangleNormalLocation();
-        uniformIfUsingTexture = shaderList[0].getIfUsingTextureLocation();
 
         uniformPointLight.uniformAmbientIntensity = shaderList[0].getPointLightAmbientIntensityLocation();
         uniformPointLight.uniformDiffuseIntensity = shaderList[0].getPointLightDiffuseIntensityLocation();
@@ -239,13 +236,14 @@ int main()
         glUniform3f(uniformCameraPosition, camera.getCameraPosition().x, camera.getCameraPosition().y, camera.getCameraPosition().z);
 
         brickTexture.useTexture();
-        plane.renderPlane(uniformModel, uniformColor, uniformIfUsingTexture);
+        plane.renderPlane(uniformModel, uniformColor);
+        brickTexture.disableTexture();
         for(int i = 0; i < meshList.size(); ++i){
             if(mouseClickMeshIndex == i){
-                meshList[i]->renderMeshWithPhongShading(uniformModel, uniformColor, true, uniformIfUsingTexture);
+                meshList[i]->renderMeshWithPhongShading(uniformModel, uniformColor, true);
             }
             else {
-                meshList[i]->renderMeshWithPhongShading(uniformModel, uniformColor, false, uniformIfUsingTexture);
+                meshList[i]->renderMeshWithPhongShading(uniformModel, uniformColor, false);
             }
         }
 
@@ -458,30 +456,6 @@ void handleKeys(GLFWwindow* window, int key, int code, int action, int mode){
                 }
             }
             break;
-
-
-            //change rendering way
-        /*case GLFW_KEY_8:
-            if(action == GLFW_PRESS){
-                if(mouseClickMeshIndex != -1){
-                    meshList[mouseClickMeshIndex]->updateRenderWay(1);
-                }
-            }
-            break;
-        case GLFW_KEY_9:
-            if(action == GLFW_PRESS){
-                if(mouseClickMeshIndex != -1){
-                    meshList[mouseClickMeshIndex]->updateRenderWay(2);
-                }
-            }
-            break;
-        case GLFW_KEY_0:
-            if(action == GLFW_PRESS){
-                if(mouseClickMeshIndex != -1){
-                    meshList[mouseClickMeshIndex]->updateRenderWay(3);
-                }
-            }
-            break;*/
 
             //delete mesh
         case GLFW_KEY_DELETE:

@@ -11,7 +11,7 @@ class Plane {
 public:
     Plane();
     void createPlane();
-    void renderPlane(GLuint uniformModel, GLuint uniformColor, GLuint uniformIfUsingTexture);
+    void renderPlane(GLuint uniformModel, GLuint uniformColor);
     ~Plane();
 private:
     GLuint planeVAO, planeVBO;

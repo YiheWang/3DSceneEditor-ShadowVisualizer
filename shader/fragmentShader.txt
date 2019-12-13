@@ -37,8 +37,6 @@ uniform Material material;
 uniform sampler2D theTexture; // TEXTURE0
 uniform sampler2D directionalShadowMap; //TEXTURE1
 
-uniform int ifUsingTexture;
-
 uniform vec3 cameraPosition;
 
 float calcDirectionalShadowMapFactor(DirectionalLight light)
@@ -98,12 +96,19 @@ void main()
     vec4 finalColor = calcPointLight();
     finalColor += calcDirectionalLight();
     //vec4 finalColor = calcDirectionalLight();
-    if(ifUsingTexture == 1){
+    if(texture(theTexture, TexCoord).rgb == vec3(0.0f)){
+        outColor = vColor * vec4(color, 1.0f) * finalColor;
+    } // when we disable texture
+    else {
+        outColor = vColor * vec4(color, 1.0f) * texture(theTexture, TexCoord) * finalColor;
+    }
+
+    /*if(ifUsingTexture == 1){
         outColor = vColor * vec4(color, 1.0f) * texture(theTexture, TexCoord) * finalColor;
     }
     else if(ifUsingTexture == 0){
         outColor = vColor * vec4(color, 1.0f) * finalColor;
-    }
+    }*/
 
     // this represents vertex color * uniform color * texture color * light color
 }

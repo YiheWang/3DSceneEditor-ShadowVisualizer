@@ -39,8 +39,7 @@ void Plane::createPlane(){
     glBindVertexArray(0);
 }
 
-void Plane::renderPlane(GLuint uniformModel, GLuint uniformColor, GLuint uniformIfUsingTexture){
-    glUniform1i(uniformIfUsingTexture, 1);
+void Plane::renderPlane(GLuint uniformModel, GLuint uniformColor){
     glUniform3f(uniformColor, 1.0f, 1.0f, 1.0f);
     glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
     glBindVertexArray(planeVAO);

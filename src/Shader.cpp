@@ -83,9 +83,6 @@ void Shader::compileShader(const char *vertexCode, const char *fragmentCode) {
     uniformCameraPosition = glGetUniformLocation(shaderID, "cameraPosition");
     uniformSpecularIntensity = glGetUniformLocation(shaderID, "material.specularIntensity");
     uniformShininess = glGetUniformLocation(shaderID, "material.shininess");
-    uniformIsFlatShading = glGetUniformLocation(shaderID, "isFlatShading");
-    uniformTriangleNormal = glGetUniformLocation(shaderID, "triangleNormal");
-    uniformifUsingTexture = glGetUniformLocation(shaderID, "ifUsingTexture");
 
     uniformPointLight.uniformLightColor = glGetUniformLocation(shaderID, "pointLight.light.lightColor");
     uniformPointLight.uniformLightPosition = glGetUniformLocation(shaderID, "pointLight.lightPosition");
@@ -128,17 +125,6 @@ GLuint Shader::getSpecularIntensityLocation(){
 
 GLuint Shader::getShininessLocation(){
     return uniformShininess;
-}
-
-GLuint Shader::getIsFlatShadingLocation(){
-    return uniformIsFlatShading;
-}
-GLuint Shader::getTriangleNormalLocation(){
-    return uniformTriangleNormal;
-}
-
-GLuint Shader::getIfUsingTextureLocation(){
-    return uniformifUsingTexture;
 }
 
 GLuint Shader::getPointLightColorLocation(){

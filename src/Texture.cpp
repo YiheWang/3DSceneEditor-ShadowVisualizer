@@ -51,10 +51,12 @@ void Texture::loadTexture()
 void Texture::useTexture()
 {
     glActiveTexture(GL_TEXTURE0);
+    // tell the shader which texture to bind
     glBindTexture(GL_TEXTURE_2D, textureID);
 }
 
 void Texture::disableTexture(){
+    glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 

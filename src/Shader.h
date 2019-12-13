@@ -22,9 +22,6 @@ public:
     GLuint getCameraPositionLocation();
     GLuint getSpecularIntensityLocation();
     GLuint getShininessLocation();
-    GLuint getIsFlatShadingLocation();
-    GLuint getTriangleNormalLocation();
-    GLuint getIfUsingTextureLocation();
 
     GLuint getPointLightColorLocation();
     GLuint getPointLightPositionLocation();
@@ -53,9 +50,6 @@ private:
     GLuint uniformCameraPosition;
     GLuint uniformSpecularIntensity;
     GLuint uniformShininess;
-    GLuint uniformIsFlatShading;
-    GLuint uniformTriangleNormal;
-    GLuint uniformifUsingTexture;
     GLuint uniformDirectionalLightTransform;
     GLuint uniformDirectionalShadowMap;
     GLuint uniformTexture;
