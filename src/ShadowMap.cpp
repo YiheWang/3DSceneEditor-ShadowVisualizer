@@ -42,11 +42,15 @@ bool ShadowMap::init(GLuint width, GLuint height){
     return true;
 }
 
-void ShadowMap::write(){
+void ShadowMap::bindFramebuffer(){
     glBindFramebuffer(GL_FRAMEBUFFER, FBO);
 }
 
-void ShadowMap::read(GLenum textureUnit){
+void ShadowMap::unBindFramebuffer(){
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
+
+void ShadowMap::useTexture(GLenum textureUnit){
     glActiveTexture(textureUnit);
     glBindTexture(GL_TEXTURE_2D, shadowMap);
 }

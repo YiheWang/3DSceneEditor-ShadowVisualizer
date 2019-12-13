@@ -15,8 +15,8 @@ public:
     Texture(char* fileLoc);
 
     void loadTexture();
-    void useTexture();
-    void disableTexture();
+    void useTexture(GLenum textureUnit);
+    void disableTexture(GLenum textureUnit);
     void clearTexture();
 
     ~Texture();

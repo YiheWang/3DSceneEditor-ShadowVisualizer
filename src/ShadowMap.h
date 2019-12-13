@@ -14,8 +14,9 @@ public:
 
     virtual bool init(GLuint width, GLuint height);
 
-    virtual void write();
-    virtual void read(GLenum textureUnit);
+    virtual void bindFramebuffer();
+    virtual void unBindFramebuffer();
+    virtual void useTexture(GLenum textureUnit);
 
     GLuint getShadowWidth(){return shadowWidth;};
     GLuint getShadowHeight(){return shadowHeight;};

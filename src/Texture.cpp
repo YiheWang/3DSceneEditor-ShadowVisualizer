@@ -48,15 +48,15 @@ void Texture::loadTexture()
     stbi_image_free(texData);
 }
 
-void Texture::useTexture()
+void Texture::useTexture(GLenum textureUnit)
 {
-    glActiveTexture(GL_TEXTURE0);
+    glActiveTexture(textureUnit);
     // tell the shader which texture to bind
     glBindTexture(GL_TEXTURE_2D, textureID);
 }
 
-void Texture::disableTexture(){
-    glActiveTexture(GL_TEXTURE0);
+void Texture::disableTexture(GLenum textureUnit){
+    glActiveTexture(textureUnit);
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 

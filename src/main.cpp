@@ -201,7 +201,33 @@ int main()
         //update global view, for mouse picking
 
         // Clear window
-        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+        glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+        //render depth of scene
+        directionalShadowShader.useShader();
+        uniformModel = directionalShadowShader.getModelLocation();
+        directionalShadowShader.setDirectionalLightTransform(directionalLight.calculateLightTransform());
+
+        glViewport(0, 0, directionalLight.getShadowMap()->getShadowWidth(), directionalLight.getShadowMap()->getShadowHeight());
+        directionalLight.getShadowMap()->bindFramebuffer();
+        glClear(GL_DEPTH_BUFFER_BIT);
+        brickTexture.useTexture(GL_TEXTURE0);
+        plane.renderPlane(uniformModel, uniformColor);
+        brickTexture.disableTexture(GL_TEXTURE0);
+        for(int i = 0; i < meshList.size(); ++i){
+            if(mouseClickMeshIndex == i){
+                meshList[i]->renderMeshWithPhongShading(uniformModel, uniformColor, true);
+            }
+            else {
+                meshList[i]->renderMeshWithPhongShading(uniformModel, uniformColor, false);
+            }
+        }
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+
+        glViewport(0, 0, bufferWidth, bufferHeight);
+        glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         //glUseProgram(shader);
@@ -224,20 +250,24 @@ int main()
         uniformDirectionalLight.uniformLightColor = shaderList[0].getDirectionalLightColorLocation();
         uniformDirectionalLight.uniformLightDirection = shaderList[0].getDirectionalLightDirectionLocation();
 
-        /*pointLight.useLight(uniformPointLight.uniformLightColor, uniformPointLight.uniformAmbientIntensity,
-                           uniformPointLight.uniformDiffuseIntensity, uniformPointLight.uniformLightPosition);*/
+        glUniformMatrix4fv(uniformProjection, 1, GL_FALSE, glm::value_ptr(projection));
+        glUniformMatrix4fv(uniformView, 1, GL_FALSE, glm::value_ptr(camera.calculateViewMatrix()));
+        glUniform3f(uniformCameraPosition, camera.getCameraPosition().x, camera.getCameraPosition().y, camera.getCameraPosition().z);
+
         directionalLight.useLight(uniformDirectionalLight.uniformLightColor, uniformDirectionalLight.uniformAmbientIntensity,
                 uniformDirectionalLight.uniformDiffuseIntensity, uniformDirectionalLight.uniformLightDirection);
 
         material.useMaterial(uniformSpecularIntensity, uniformShininess);
 
-        glUniformMatrix4fv(uniformProjection, 1, GL_FALSE, glm::value_ptr(projection));
-        glUniformMatrix4fv(uniformView, 1, GL_FALSE, glm::value_ptr(camera.calculateViewMatrix()));
-        glUniform3f(uniformCameraPosition, camera.getCameraPosition().x, camera.getCameraPosition().y, camera.getCameraPosition().z);
+        shaderList[0].setDirectionalLightTransform(directionalLight.calculateLightTransform());
 
-        brickTexture.useTexture();
+        directionalLight.getShadowMap()->useTexture(GL_TEXTURE1);
+        shaderList[0].setTexture(0);
+        shaderList[0].setDirectionalShadowMap(1);
+
+        brickTexture.useTexture(GL_TEXTURE0);
         plane.renderPlane(uniformModel, uniformColor);
-        brickTexture.disableTexture();
+        brickTexture.disableTexture(GL_TEXTURE0);
         for(int i = 0; i < meshList.size(); ++i){
             if(mouseClickMeshIndex == i){
                 meshList[i]->renderMeshWithPhongShading(uniformModel, uniformColor, true);

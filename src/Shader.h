@@ -35,7 +35,7 @@ public:
 
     void setTexture(GLuint textureUnit);
     void setDirectionalShadowMap(GLuint textureUint);
-    void setDirectionalLightTransform(glm::mat4* lightTransform);
+    void setDirectionalLightTransform(glm::mat4 lightTransform);
 
     void useShader();
     void clearShader();

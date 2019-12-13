@@ -18,10 +18,10 @@ protected:
 
     virtual void useLight(GLfloat lightColourLocation, GLfloat ambientIntensityLocation,
                   GLfloat diffuseIntensityLocation);
-
-    ShadowMap* getShadowMap() {return shadowMap;};
-
     ~Light();
+
+public:
+    ShadowMap* getShadowMap() {return shadowMap;};
 
 protected:
     glm::vec3 lightColor;

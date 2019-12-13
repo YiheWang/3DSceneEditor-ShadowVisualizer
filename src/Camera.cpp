@@ -66,6 +66,9 @@ void Camera::keyControl(bool *keys, GLfloat deltaTime){
     }
     if(keys[GLFW_KEY_E]){
         radius = radius - movedAmount;
+        if(radius < 0.01f){
+            radius = 0.1f;
+        }
         updatePosition();
     }// move on z axis
 }
