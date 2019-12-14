@@ -14,6 +14,7 @@ public:
 		GLfloat diffuseIntensityLocation, GLfloat directionLocation);
 
 	glm::mat4 calculateLightTransform();
+    void keyControl(bool *keys, GLfloat deltaTime);
 
 	~DirectionalLight();
 

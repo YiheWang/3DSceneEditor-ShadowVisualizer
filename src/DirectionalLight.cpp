@@ -22,6 +22,32 @@ glm::mat4 DirectionalLight::calculateLightTransform(){
     return lightProjection * glm::lookAt(-direction, glm::vec3(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 }
 
+void DirectionalLight::keyControl(bool *keys, GLfloat deltaTime){
+    GLfloat movedAmount = 1.0 * deltaTime;
+
+    //move light direction of z axis
+    if(keys[GLFW_KEY_UP]){
+        direction.z += movedAmount;
+    }
+    if(keys[GLFW_KEY_DOWN]){
+        direction.z -= movedAmount;
+    }
+    //move light direction of x axis
+    if(keys[GLFW_KEY_LEFT]){
+        direction.x += movedAmount;
+    }
+    if(keys[GLFW_KEY_RIGHT]){
+        direction.x -= movedAmount;
+    }
+    //move light direction of y axis
+    if(keys[GLFW_KEY_N]){
+        direction.y += movedAmount;
+    }
+    if(keys[GLFW_KEY_M]){
+        direction.y -= movedAmount;
+    }
+}
+
 DirectionalLight::~DirectionalLight()
 {
 }

@@ -160,11 +160,8 @@ int main()
     GLuint uniformColor = 0;
     GLuint uniformView = 0;
     GLuint uniformCameraPosition = 0;
-    GLuint uniformIsFlatShading = 0;
-    GLuint uniformTriangleNormal = 0;
     GLuint uniformShininess = 0;
     GLuint uniformSpecularIntensity = 0;
-    GLuint uniformIfUsingTexture = 0;
 
     struct UniformPointLight{
         GLuint uniformLightColor = 0;
@@ -196,6 +193,7 @@ int main()
         lastTime = now;
 
         camera.keyControl(keys, deltaTime);
+        directionalLight.keyControl(keys, deltaTime);
 
         view = camera.calculateViewMatrix();
         //update global view, for mouse picking
@@ -321,7 +319,7 @@ void handleKeys(GLFWwindow* window, int key, int code, int action, int mode){
             }
             break;
 
-            //for camera control, sphere coordinate
+        // for light moveing
         case GLFW_KEY_UP:
             if(action == GLFW_PRESS){
                 keys[key] = true;
@@ -354,6 +352,24 @@ void handleKeys(GLFWwindow* window, int key, int code, int action, int mode){
                 keys[key] = false;
             }
             break;
+        case GLFW_KEY_N:
+            if(action == GLFW_PRESS){
+                keys[key] = true;
+            }
+            else if(action == GLFW_RELEASE){
+                keys[key] = false;
+            }
+            break;
+        case GLFW_KEY_M:
+            if(action == GLFW_PRESS){
+                keys[key] = true;
+            }
+            else if(action == GLFW_RELEASE){
+                keys[key] = false;
+            }
+            break;
+
+            //for camera control, sphere coordinate
         case GLFW_KEY_W:
             if(action == GLFW_PRESS){
                 keys[key] = true;

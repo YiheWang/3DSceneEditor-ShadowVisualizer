@@ -29,7 +29,8 @@ protected:
     GLfloat diffuseIntensity;
 
     glm::mat4 lightProjection;
-    ShadowMap *shadowMap;
+    ShadowMap* shadowMap;
+    //use pointer here because shadowMap has some own pointer
 };
 
 
