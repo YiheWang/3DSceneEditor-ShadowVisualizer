@@ -99,7 +99,7 @@ int main()
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 
     // Create the window
-    mainWindow = glfwCreateWindow(WIDTH, HEIGHT, "Test Window", NULL, NULL);
+    mainWindow = glfwCreateWindow(WIDTH, HEIGHT, "Shadow Visualizer Window", NULL, NULL);
     if (!mainWindow)
     {
         printf("GLFW window creation failed!");
@@ -201,7 +201,7 @@ int main()
         //update global view, for mouse picking
 
         // Clear window
-        glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         //render depth of scene
@@ -227,7 +227,6 @@ int main()
 
 
         glViewport(0, 0, bufferWidth, bufferHeight);
-        glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         //glUseProgram(shader);
