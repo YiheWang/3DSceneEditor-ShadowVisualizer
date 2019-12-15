@@ -25,6 +25,19 @@ void Shader::createFromFiles(const char* vertexFile, const char* fragmentFile){
     compileShader(vertexCode, fragmentCode);
 }
 
+void Shader::createFromFiles(const char* vertexFile, const char* geometryFile, const char* fragmentFile){
+    std::string vertexString = readFile(vertexFile);
+    std::string geometryString = readFile(geometryFile);
+    std::string fragmentString = readFile(fragmentFile);
+
+    const char* vertexCode = vertexString.c_str();
+    //convert string to const char*
+    const char* geometryCode = geometryString.c_str();
+    const char* fragmentCode = fragmentString.c_str();
+
+    compileShader(vertexCode, geometryCode, fragmentCode);
+}
+
 std::string Shader::readFile(const char* file){
     std::string content;
     std::ifstream fileStream(file, std::ios::in);
@@ -55,6 +68,26 @@ void Shader::compileShader(const char *vertexCode, const char *fragmentCode) {
     addShader(shaderID, vertexCode, GL_VERTEX_SHADER);
     addShader(shaderID, fragmentCode, GL_FRAGMENT_SHADER);
 
+    compileProgram();
+}
+
+void Shader::compileShader(const char *vertexCode, const char *geometryCode, const char *fragmentCode) {
+    shaderID = glCreateProgram();
+
+    if (!shaderID)
+    {
+        printf("Failed to create shader\n");
+        return;
+    }
+
+    addShader(shaderID, vertexCode, GL_VERTEX_SHADER);
+    addShader(shaderID, geometryCode, GL_GEOMETRY_SHADER);
+    addShader(shaderID, fragmentCode, GL_FRAGMENT_SHADER);
+
+    compileProgram();
+}
+
+void Shader::compileProgram(){
     GLint result = 0;
     GLchar eLog[1024] = { 0 };
 

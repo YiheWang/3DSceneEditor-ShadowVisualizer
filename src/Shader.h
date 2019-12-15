@@ -12,6 +12,7 @@ public:
     Shader();
     void createFromString(const char* vertexCode, const char* fragmentCode);
     void createFromFiles(const char* vertexFile, const char* fragmentFile);
+    void createFromFiles(const char* vertexFile, const char* geometryFile, const char* fragmentFile);
 
     std::string readFile(const char* file);
 
@@ -79,7 +80,10 @@ private:
     }uniformDirectionalLight;
 
     void compileShader(const char* vertexCode, const char* fragmentCode);
+    void compileShader(const char* vertexCode, const char* geometryCode, const char* fragmentCode);
     void addShader(GLuint theProgram, const char* shaderCode, GLenum shaderType);
+
+    void compileProgram();
 };
 
 
