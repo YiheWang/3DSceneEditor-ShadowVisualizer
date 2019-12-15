@@ -23,7 +23,7 @@ public:
 
     ~ShadowMap();
 
-private:
+protected:
     GLuint FBO;
     GLuint shadowMap;
     GLuint shadowWidth, shadowHeight;

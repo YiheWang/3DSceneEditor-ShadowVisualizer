@@ -210,9 +210,9 @@ int main()
         glViewport(0, 0, directionalLight.getShadowMap()->getShadowWidth(), directionalLight.getShadowMap()->getShadowHeight());
         directionalLight.getShadowMap()->bindFramebuffer();
         glClear(GL_DEPTH_BUFFER_BIT);
-        brickTexture.useTexture(GL_TEXTURE0);
+        //brickTexture.useTexture(GL_TEXTURE0);
         plane.renderPlane(uniformModel, uniformColor);
-        brickTexture.disableTexture(GL_TEXTURE0);
+        //brickTexture.disableTexture(GL_TEXTURE0);
         for(int i = 0; i < meshList.size(); ++i){
             if(mouseClickMeshIndex == i){
                 meshList[i]->renderMeshWithPhongShading(uniformModel, uniformColor, true);
@@ -257,10 +257,10 @@ int main()
         material.useMaterial(uniformSpecularIntensity, uniformShininess);
 
         shaderList[0].setDirectionalLightTransform(directionalLight.calculateLightTransform());
-
-        directionalLight.getShadowMap()->useTexture(GL_TEXTURE1);
         shaderList[0].setTexture(0);
         shaderList[0].setDirectionalShadowMap(1);
+
+        directionalLight.getShadowMap()->useTexture(GL_TEXTURE1);
 
         brickTexture.useTexture(GL_TEXTURE0);
         plane.renderPlane(uniformModel, uniformColor);
