@@ -33,9 +33,14 @@ public:
     GLuint getDirectionalLightAmbientIntensityLocation();
     GLuint getDirectionalLightDiffuseIntensityLocation();
 
+    GLuint getOmniLightPositionLocation();
+    GLuint getFarPlaneLocation();
+
     void setTexture(GLuint textureUnit);
     void setDirectionalShadowMap(GLuint textureUint);
     void setDirectionalLightTransform(glm::mat4 lightTransform);
+
+    void setOmniLightMatrices(std::vector<glm::mat4> lightMatrices);
 
     void useShader();
     void clearShader();
@@ -50,9 +55,14 @@ private:
     GLuint uniformCameraPosition;
     GLuint uniformSpecularIntensity;
     GLuint uniformShininess;
+
     GLuint uniformDirectionalLightTransform;
     GLuint uniformDirectionalShadowMap;
     GLuint uniformTexture;
+
+    GLuint uniformOmniLightPosition;
+    GLuint uniformFarPlane;
+    GLuint uniformOmniLightMatrices[6];
 
     struct {
         GLuint uniformLightColor;

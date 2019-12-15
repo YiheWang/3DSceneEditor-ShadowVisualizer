@@ -11,6 +11,7 @@
 #include <string>
 #include <vector>
 #include <cmath>
+#include <cstdio>
 
 #define GLM_FORCE_SWIZZLE
 #include <glm/glm.hpp>

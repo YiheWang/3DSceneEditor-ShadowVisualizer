@@ -97,6 +97,14 @@ void Shader::compileShader(const char *vertexCode, const char *fragmentCode) {
     uniformTexture = glGetUniformLocation(shaderID, "theTexture");
     uniformDirectionalLightTransform = glGetUniformLocation(shaderID, "directionalLightTransform");
     uniformDirectionalShadowMap = glGetUniformLocation(shaderID, "directionalShadowMap");
+
+    uniformOmniLightPosition = glGetUniformLocation(shaderID, "lightPos");
+    uniformFarPlane = glGetUniformLocation(shaderID, "farPlane");
+    for(int i = 0; i < 6; ++i){
+        char locBuff[100] = {'\0'};
+        snprintf(locBuff, sizeof(locBuff), "lightMatrices[%d]", i);
+        uniformOmniLightMatrices[i] = glGetUniformLocation(shaderID, locBuff);
+    }
 }
 
 GLuint Shader::getProjectionLocation(){
@@ -169,6 +177,20 @@ void Shader::setDirectionalShadowMap(GLuint textureUnit){
 
 void Shader::setDirectionalLightTransform(glm::mat4 lightTransform){
     glUniformMatrix4fv(uniformDirectionalLightTransform, 1, GL_FALSE, glm::value_ptr(lightTransform));
+}
+
+GLuint Shader::getOmniLightPositionLocation(){
+    return uniformOmniLightPosition;
+}
+
+GLuint Shader::getFarPlaneLocation(){
+    return uniformFarPlane;
+}
+
+void Shader::setOmniLightMatrices(std::vector<glm::mat4> lightMatrices){
+    for(int i = 0; i < 0; ++i){
+        glUniformMatrix4fv(uniformOmniLightMatrices[i], 1, GL_FALSE, glm::value_ptr(lightMatrices[i]));
+    }
 }
 
 void Shader::useShader() {
