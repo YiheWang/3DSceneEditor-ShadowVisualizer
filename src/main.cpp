@@ -50,6 +50,7 @@ GLfloat deltaTime = 0.0f;
 GLfloat lastTime = 0.0f;
 
 bool keys[1024];
+bool ifControlDirectionalLight = true;
 
 int mouseClickMeshIndex = -1;
 
@@ -156,7 +157,7 @@ int main()
                   0.01f, 100.0f,
                   1.0f, 1.0f, 1.0f,
                   0.1f, 0.6f,
-                  -5.0f, 5.0f, -5.0f);
+                  -3.0f, 3.0f, -3.0f);
     directionalLight = DirectionalLight(2048, 2048,
             1.0f, 1.0f, 1.0f,
             0.1f, 0.6f,
@@ -203,7 +204,12 @@ int main()
         lastTime = now;
 
         camera.keyControl(keys, deltaTime);
-        directionalLight.keyControl(keys, deltaTime);
+        if(ifControlDirectionalLight){
+            directionalLight.keyControl(keys, deltaTime);
+        }
+        else {
+            pointLight.keyControl(keys, deltaTime);
+        }
 
         view = camera.calculateViewMatrix();
         //update global view, for mouse picking
@@ -549,6 +555,18 @@ void handleKeys(GLFWwindow* window, int key, int code, int action, int mode){
             if(action == GLFW_PRESS){
                 if(mouseClickMeshIndex != -1){
                     meshList[mouseClickMeshIndex]->rotation(20.0f, 3);
+                }
+            }
+            break;
+
+        case GLFW_KEY_P:
+            if(action == GLFW_PRESS){
+                ifControlDirectionalLight = !ifControlDirectionalLight;
+                if(ifControlDirectionalLight){
+                    std::cout<<"Control directional light"<<std::endl;
+                }
+                else {
+                    std::cout<<"Control point light"<<std::endl;
                 }
             }
             break;

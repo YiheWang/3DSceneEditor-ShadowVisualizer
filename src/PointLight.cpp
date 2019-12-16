@@ -46,6 +46,32 @@ std::vector<glm::mat4> PointLight::calculateLightTransform(){
     return lightMatrices;
 }
 
+void PointLight::keyControl(bool *keys, GLfloat deltaTime){
+    GLfloat movedAmount = 1.0 * deltaTime;
+
+    //move light direction of z axis
+    if(keys[GLFW_KEY_UP]){
+        lightPosition.z += movedAmount;
+    }
+    if(keys[GLFW_KEY_DOWN]){
+        lightPosition.z -= movedAmount;
+    }
+    //move light direction of x axis
+    if(keys[GLFW_KEY_LEFT]){
+        lightPosition.x += movedAmount;
+    }
+    if(keys[GLFW_KEY_RIGHT]){
+        lightPosition.x -= movedAmount;
+    }
+    //move light direction of y axis
+    if(keys[GLFW_KEY_N]){
+        lightPosition.y += movedAmount;
+    }
+    if(keys[GLFW_KEY_M]){
+        lightPosition.y -= movedAmount;
+    }
+}
+
 GLfloat PointLight::getFarPlane(){
     return farPlane;
 }

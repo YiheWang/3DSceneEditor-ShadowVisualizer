@@ -22,6 +22,8 @@ public:
 
     std::vector<glm::mat4> calculateLightTransform();
 
+    void keyControl(bool *keys, GLfloat deltaTime);
+
     GLfloat getFarPlane();
     glm::vec3 getPosition();
 
