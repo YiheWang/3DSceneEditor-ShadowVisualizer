@@ -23,6 +23,7 @@ public:
     std::vector<glm::mat4> calculateLightTransform();
 
     GLfloat getFarPlane();
+    glm::vec3 getPosition();
 
     ~PointLight();
 

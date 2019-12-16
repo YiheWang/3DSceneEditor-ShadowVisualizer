@@ -33,6 +33,7 @@ Texture brickTexture;
 vector<Mesh*> meshList;
 vector<Shader> shaderList;
 Shader directionalShadowShader;
+Shader omniShadowShader;
 
 vector<TriangleVertexIndex> indicesOfBunny;
 vector<Vertex> verticesOfBunny;
@@ -59,6 +60,10 @@ static const char* fShader = "../Shader/fragmentShader.txt";
 
 static const char* directionalShadowMapVShader = "../Shader/directionalShadowMapVertexShader.txt";
 static const char* directionalShadowMapFShader = "../Shader/directionalShadowMapFragmentShader.txt";
+
+static const char* omniShadowMapVShader = "../Shader/omniShadowMapVertexShader.txt";
+static const char* omniShadowMapGShader = "../Shader/omniShadowMapGeometryShader.txt";
+static const char* omniShadowMapFShader = "../Shader/omniShadowMapFragmentShader.txt";
 
 string bumpyCube = "../meshFile/bumpy_cube.off";
 string bunny = "../meshFile/bunny.off";
@@ -147,9 +152,11 @@ int main()
             0.872665f, 1.0f); // move 10 degree every time unit
 
     material = Material(1.0f, 132);
-    /*pointLight = PointLight(1.0f, 1.0f, 1.0f,
+    pointLight = PointLight(1024, 1024,
+                  0.01f, 100.0f,
+                  1.0f, 1.0f, 1.0f,
                   0.1f, 0.6f,
-                  -5.0f, 5.0f, 5.0f);*/
+                  -5.0f, 5.0f, -5.0f);
     directionalLight = DirectionalLight(2048, 2048,
             1.0f, 1.0f, 1.0f,
             0.1f, 0.6f,
@@ -162,6 +169,9 @@ int main()
     GLuint uniformCameraPosition = 0;
     GLuint uniformShininess = 0;
     GLuint uniformSpecularIntensity = 0;
+
+    GLuint uniformOmniLightPosition = 0;
+    GLuint uniformFarPlane = 0;
 
     struct UniformPointLight{
         GLuint uniformLightColor = 0;
@@ -202,7 +212,35 @@ int main()
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        //render depth of scene
+        //render depth of scene for point light
+        omniShadowShader.useShader();
+        uniformModel = omniShadowShader.getModelLocation();
+        uniformOmniLightPosition = omniShadowShader.getOmniLightPositionLocation();
+        uniformFarPlane = omniShadowShader.getFarPlaneLocation();
+
+        glUniform3f(uniformOmniLightPosition, pointLight.getPosition().x, pointLight.getPosition().y, pointLight.getPosition().z);
+        glUniform1f(uniformFarPlane, pointLight.getFarPlane());
+        omniShadowShader.setOmniLightMatrices(pointLight.calculateLightTransform());
+
+        glViewport(0, 0, pointLight.getShadowMap()->getShadowWidth(), pointLight.getShadowMap()->getShadowHeight());
+        pointLight.getShadowMap()->bindFramebuffer();
+        glClear(GL_DEPTH_BUFFER_BIT);
+
+        omniShadowShader.validate();
+        //brickTexture.useTexture(GL_TEXTURE0);
+        plane.renderPlane(uniformModel, uniformColor);
+        //brickTexture.disableTexture(GL_TEXTURE0);
+        for(int i = 0; i < meshList.size(); ++i){
+            if(mouseClickMeshIndex == i){
+                meshList[i]->renderMeshWithPhongShading(uniformModel, uniformColor, true);
+            }
+            else {
+                meshList[i]->renderMeshWithPhongShading(uniformModel, uniformColor, false);
+            }
+        }
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+        //render depth of scene for directional light
         directionalShadowShader.useShader();
         uniformModel = directionalShadowShader.getModelLocation();
         directionalShadowShader.setDirectionalLightTransform(directionalLight.calculateLightTransform());
@@ -210,6 +248,8 @@ int main()
         glViewport(0, 0, directionalLight.getShadowMap()->getShadowWidth(), directionalLight.getShadowMap()->getShadowHeight());
         directionalLight.getShadowMap()->bindFramebuffer();
         glClear(GL_DEPTH_BUFFER_BIT);
+
+        directionalShadowShader.validate();
         //brickTexture.useTexture(GL_TEXTURE0);
         plane.renderPlane(uniformModel, uniformColor);
         //brickTexture.disableTexture(GL_TEXTURE0);
@@ -251,20 +291,31 @@ int main()
         glUniformMatrix4fv(uniformView, 1, GL_FALSE, glm::value_ptr(camera.calculateViewMatrix()));
         glUniform3f(uniformCameraPosition, camera.getCameraPosition().x, camera.getCameraPosition().y, camera.getCameraPosition().z);
 
+        pointLight.useLight(uniformPointLight.uniformLightColor, uniformPointLight.uniformAmbientIntensity,
+                            uniformPointLight.uniformDiffuseIntensity, uniformPointLight.uniformLightPosition);
+
         directionalLight.useLight(uniformDirectionalLight.uniformLightColor, uniformDirectionalLight.uniformAmbientIntensity,
                 uniformDirectionalLight.uniformDiffuseIntensity, uniformDirectionalLight.uniformLightDirection);
 
         material.useMaterial(uniformSpecularIntensity, uniformShininess);
 
+        shaderList[0].setTexture(1);
+        shaderList[0].setDirectionalShadowMap(2);
+        shaderList[0].setOmniShadowMap(3);
+        //set start from 1 to solve the struggling type on texture unit 0
+        //at the very beginning all the texture will be bind to texture unit 0
+        //sampler2D is different type of samplerCube
+
         shaderList[0].setDirectionalLightTransform(directionalLight.calculateLightTransform());
-        shaderList[0].setTexture(0);
-        shaderList[0].setDirectionalShadowMap(1);
+        directionalLight.getShadowMap()->useTexture(GL_TEXTURE2);
 
-        directionalLight.getShadowMap()->useTexture(GL_TEXTURE1);
+        shaderList[0].setFarPlane(pointLight.getFarPlane());
+        pointLight.getShadowMap()->useTexture(GL_TEXTURE3);
 
-        brickTexture.useTexture(GL_TEXTURE0);
+        brickTexture.useTexture(GL_TEXTURE1);
+        shaderList[0].validate();
         plane.renderPlane(uniformModel, uniformColor);
-        brickTexture.disableTexture(GL_TEXTURE0);
+        brickTexture.disableTexture(GL_TEXTURE1);
         for(int i = 0; i < meshList.size(); ++i){
             if(mouseClickMeshIndex == i){
                 meshList[i]->renderMeshWithPhongShading(uniformModel, uniformColor, true);
@@ -564,6 +615,7 @@ void createShaders(){
 
     directionalShadowShader = Shader();
     directionalShadowShader.createFromFiles(directionalShadowMapVShader, directionalShadowMapFShader);
+    omniShadowShader.createFromFiles(omniShadowMapVShader, omniShadowMapGShader, omniShadowMapFShader);
 }
 
 void loadFile(){

@@ -30,9 +30,16 @@ struct Material{
 	float shininess;
 };
 
+struct OmniShadowMap{
+    samplerCube shadowMap;
+    float farPlane;
+};
+
 uniform PointLight pointLight;
 uniform DirectionalLight directionalLight;
 uniform Material material;
+
+uniform OmniShadowMap omniShadowMap;
 
 uniform sampler2D theTexture; // TEXTURE0
 uniform sampler2D directionalShadowMap; //TEXTURE1
@@ -46,7 +53,6 @@ float calcDirectionalShadowMapFactor(DirectionalLight light)
     projectedCoords = (projectedCoords * 0.5) + 0.5;
     // change range from -1, 1 to 0, 1
 
-    //float closestDepth = texture(directionalShadowMap, projectedCoords.xy).r;
     float currentDepth = projectedCoords.z;
 
     vec3 normal = normalize(Normal);
@@ -69,6 +75,19 @@ float calcDirectionalShadowMapFactor(DirectionalLight light)
     if(projectedCoords.z > 1.0){
         shadow = 0.0f;
     }
+
+    return shadow;
+}
+
+float calcOmniShadowFactor(PointLight light){
+    vec3 fragToLight = FragPos - light.lightPosition;
+    float closestDepth = texture(omniShadowMap.shadowMap, fragToLight).r;
+
+    closestDepth *= omniShadowMap.farPlane;
+
+    float currentDepth = length(fragToLight);
+    float bias = 0.0;
+    float shadow = currentDepth - bias > closestDepth ? 1.0 : 0.0;
 
     return shadow;
 }
@@ -99,14 +118,14 @@ vec4 calcPointLight(){
 	// point from fragment to light source
 	direction = normalize(direction);
 
-	vec4 color = calcLightByDirection(pointLight.light, direction, 0.0f);
+    float shadowFactor = calcOmniShadowFactor(pointLight);
+	vec4 color = calcLightByDirection(pointLight.light, direction, shadowFactor);
 	return color;
 }
 
 vec4 calcDirectionalLight(){
     float shadowFactor = calcDirectionalShadowMapFactor(directionalLight);
 	return calcLightByDirection(directionalLight.light, normalize(-directionalLight.lightDirection), shadowFactor);
-	//return calcLightByDirection(directionalLight.light, normalize(-directionalLight.lightDirection), 0.0f);
 	//from fragment to light source
 }
 
@@ -114,20 +133,12 @@ void main()
 {
     vec4 finalColor = calcPointLight();
     finalColor += calcDirectionalLight();
-    //vec4 finalColor = calcDirectionalLight();
     if(texture(theTexture, TexCoord).rgb == vec3(0.0f)){
-        outColor = vColor * vec4(color, 1.0f) * finalColor;
+        //outColor = vColor * vec4(color, 1.0f) * finalColor;
     } // when we disable texture
     else {
-        outColor = vColor * vec4(color, 1.0f) * texture(theTexture, TexCoord) * finalColor;
+        //outColor = vColor * vec4(color, 1.0f) * texture(theTexture, TexCoord) * finalColor;
     }
-
-    /*if(ifUsingTexture == 1){
-        outColor = vColor * vec4(color, 1.0f) * texture(theTexture, TexCoord) * finalColor;
-    }
-    else if(ifUsingTexture == 0){
-        outColor = vColor * vec4(color, 1.0f) * finalColor;
-    }*/
 
     // this represents vertex color * uniform color * texture color * light color
 }

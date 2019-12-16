@@ -14,6 +14,8 @@ public:
     void createFromFiles(const char* vertexFile, const char* fragmentFile);
     void createFromFiles(const char* vertexFile, const char* geometryFile, const char* fragmentFile);
 
+    void validate();
+
     std::string readFile(const char* file);
 
     GLuint getProjectionLocation();
@@ -38,9 +40,12 @@ public:
     GLuint getFarPlaneLocation();
 
     void setTexture(GLuint textureUnit);
+
     void setDirectionalShadowMap(GLuint textureUint);
     void setDirectionalLightTransform(glm::mat4 lightTransform);
 
+    void setOmniShadowMap(GLuint textureUint);
+    void setFarPlane(float farPlane);
     void setOmniLightMatrices(std::vector<glm::mat4> lightMatrices);
 
     void useShader();
@@ -78,6 +83,11 @@ private:
         GLuint uniformAmbientIntensity;
         GLuint uniformDiffuseIntensity;
     }uniformDirectionalLight;
+
+    struct {
+        GLuint shadowMap;
+        GLuint farPlane;
+    }uniformOmniShadowMap;
 
     void compileShader(const char* vertexCode, const char* fragmentCode);
     void compileShader(const char* vertexCode, const char* geometryCode, const char* fragmentCode);

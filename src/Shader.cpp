@@ -87,6 +87,20 @@ void Shader::compileShader(const char *vertexCode, const char *geometryCode, con
     compileProgram();
 }
 
+void Shader::validate(){
+    GLint result = 0;
+    GLchar eLog[1024] = { 0 };
+
+    glValidateProgram(shaderID);
+    glGetProgramiv(shaderID, GL_VALIDATE_STATUS, &result);
+    if (!result)
+    {
+        glGetProgramInfoLog(shaderID, sizeof(eLog), NULL, eLog);
+        printf("Error validating program: '%s'\n", eLog);
+        return;
+    }
+}
+
 void Shader::compileProgram(){
     GLint result = 0;
     GLchar eLog[1024] = { 0 };
@@ -97,15 +111,6 @@ void Shader::compileProgram(){
     {
         glGetProgramInfoLog(shaderID, sizeof(eLog), NULL, eLog);
         printf("Error linking program: '%s'\n", eLog);
-        return;
-    }
-
-    glValidateProgram(shaderID);
-    glGetProgramiv(shaderID, GL_VALIDATE_STATUS, &result);
-    if (!result)
-    {
-        glGetProgramInfoLog(shaderID, sizeof(eLog), NULL, eLog);
-        printf("Error validating program: '%s'\n", eLog);
         return;
     }
 
@@ -138,6 +143,9 @@ void Shader::compileProgram(){
         snprintf(locBuff, sizeof(locBuff), "lightMatrices[%d]", i);
         uniformOmniLightMatrices[i] = glGetUniformLocation(shaderID, locBuff);
     }
+
+    uniformOmniShadowMap.shadowMap = glGetUniformLocation(shaderID, "omniShadowMap.shadowMap");
+    uniformOmniShadowMap.farPlane = glGetUniformLocation(shaderID, "omniShadowMap.farPlane");
 }
 
 GLuint Shader::getProjectionLocation(){
@@ -218,6 +226,14 @@ GLuint Shader::getOmniLightPositionLocation(){
 
 GLuint Shader::getFarPlaneLocation(){
     return uniformFarPlane;
+}
+
+void Shader::setOmniShadowMap(GLuint textureUint){
+    glUniform1i(uniformOmniShadowMap.shadowMap, textureUint);
+}
+
+void Shader::setFarPlane(float farPlane){
+    glUniform1f(uniformOmniShadowMap.farPlane, farPlane);
 }
 
 void Shader::setOmniLightMatrices(std::vector<glm::mat4> lightMatrices){
