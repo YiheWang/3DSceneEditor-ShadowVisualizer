@@ -86,7 +86,7 @@ float calcOmniShadowFactor(PointLight light){
     closestDepth *= omniShadowMap.farPlane;
 
     float currentDepth = length(fragToLight);
-    float bias = 0.0;
+    float bias = 0.001;
     float shadow = currentDepth - bias > closestDepth ? 1.0 : 0.0;
 
     return shadow;
@@ -119,6 +119,7 @@ vec4 calcPointLight(){
 	direction = normalize(direction);
 
     float shadowFactor = calcOmniShadowFactor(pointLight);
+    //vec4 color = calcLightByDirection(pointLight.light, direction, 1.0);
 	vec4 color = calcLightByDirection(pointLight.light, direction, shadowFactor);
 	return color;
 }
@@ -134,10 +135,10 @@ void main()
     vec4 finalColor = calcPointLight();
     finalColor += calcDirectionalLight();
     if(texture(theTexture, TexCoord).rgb == vec3(0.0f)){
-        //outColor = vColor * vec4(color, 1.0f) * finalColor;
+        outColor = vColor * vec4(color, 1.0f) * finalColor;
     } // when we disable texture
     else {
-        //outColor = vColor * vec4(color, 1.0f) * texture(theTexture, TexCoord) * finalColor;
+        outColor = vColor * vec4(color, 1.0f) * texture(theTexture, TexCoord) * finalColor;
     }
 
     // this represents vertex color * uniform color * texture color * light color

@@ -41,10 +41,10 @@ public:
 
     void setTexture(GLuint textureUnit);
 
-    void setDirectionalShadowMap(GLuint textureUint);
+    void setDirectionalShadowMap(GLuint textureUnit);
     void setDirectionalLightTransform(glm::mat4 lightTransform);
 
-    void setOmniShadowMap(GLuint textureUint);
+    void setOmniShadowMap(GLuint textureUnit);
     void setFarPlane(float farPlane);
     void setOmniLightMatrices(std::vector<glm::mat4> lightMatrices);
 

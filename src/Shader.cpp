@@ -228,8 +228,8 @@ GLuint Shader::getFarPlaneLocation(){
     return uniformFarPlane;
 }
 
-void Shader::setOmniShadowMap(GLuint textureUint){
-    glUniform1i(uniformOmniShadowMap.shadowMap, textureUint);
+void Shader::setOmniShadowMap(GLuint textureUnit){
+    glUniform1i(uniformOmniShadowMap.shadowMap, textureUnit);
 }
 
 void Shader::setFarPlane(float farPlane){
@@ -237,7 +237,7 @@ void Shader::setFarPlane(float farPlane){
 }
 
 void Shader::setOmniLightMatrices(std::vector<glm::mat4> lightMatrices){
-    for(int i = 0; i < 0; ++i){
+    for(int i = 0; i < 6; ++i){
         glUniformMatrix4fv(uniformOmniLightMatrices[i], 1, GL_FALSE, glm::value_ptr(lightMatrices[i]));
     }
 }
