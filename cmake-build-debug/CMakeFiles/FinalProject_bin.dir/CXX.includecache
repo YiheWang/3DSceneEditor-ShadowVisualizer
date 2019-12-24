@@ -1438,17 +1438,17 @@ detail/setup.hpp
 detail/func_vector_relational.inl
 ../libs/glm/glm/detail/func_vector_relational.inl
 
+C:/Users/Yihe Wang/OneDrive/Local/learning resources/NYU/2019 Fall Semes/CS 6533 Interactive Computer Graphics/Final Project/FinalProject/src/Camera.cpp
+Camera.h
+C:/Users/Yihe Wang/OneDrive/Local/learning resources/NYU/2019 Fall Semes/CS 6533 Interactive Computer Graphics/Final Project/FinalProject/src/Camera.h
+Constant.h
+C:/Users/Yihe Wang/OneDrive/Local/learning resources/NYU/2019 Fall Semes/CS 6533 Interactive Computer Graphics/Final Project/FinalProject/src/Constant.h
+
 C:/Users/Yihe Wang/OneDrive/Local/learning resources/NYU/2019 Fall Semes/CS 6533 Interactive Computer Graphics/Final Project/FinalProject/src/Camera.h
 Header.h
 C:/Users/Yihe Wang/OneDrive/Local/learning resources/NYU/2019 Fall Semes/CS 6533 Interactive Computer Graphics/Final Project/FinalProject/src/Header.h
 
-C:/Users/Yihe Wang/OneDrive/Local/learning resources/NYU/2019 Fall Semes/CS 6533 Interactive Computer Graphics/Final Project/FinalProject/src/DirectionalLight.h
-Light.h
-C:/Users/Yihe Wang/OneDrive/Local/learning resources/NYU/2019 Fall Semes/CS 6533 Interactive Computer Graphics/Final Project/FinalProject/src/Light.h
-
-C:/Users/Yihe Wang/OneDrive/Local/learning resources/NYU/2019 Fall Semes/CS 6533 Interactive Computer Graphics/Final Project/FinalProject/src/Editor.h
-Header.h
-C:/Users/Yihe Wang/OneDrive/Local/learning resources/NYU/2019 Fall Semes/CS 6533 Interactive Computer Graphics/Final Project/FinalProject/src/Header.h
+C:/Users/Yihe Wang/OneDrive/Local/learning resources/NYU/2019 Fall Semes/CS 6533 Interactive Computer Graphics/Final Project/FinalProject/src/Constant.h
 
 C:/Users/Yihe Wang/OneDrive/Local/learning resources/NYU/2019 Fall Semes/CS 6533 Interactive Computer Graphics/Final Project/FinalProject/src/Header.h
 iostream
@@ -1482,111 +1482,5 @@ windows.h
 GL/gl.h
 -
 GLFW/glfw3.h
--
-
-C:/Users/Yihe Wang/OneDrive/Local/learning resources/NYU/2019 Fall Semes/CS 6533 Interactive Computer Graphics/Final Project/FinalProject/src/Light.h
-Header.h
-C:/Users/Yihe Wang/OneDrive/Local/learning resources/NYU/2019 Fall Semes/CS 6533 Interactive Computer Graphics/Final Project/FinalProject/src/Header.h
-ShadowMap.h
-C:/Users/Yihe Wang/OneDrive/Local/learning resources/NYU/2019 Fall Semes/CS 6533 Interactive Computer Graphics/Final Project/FinalProject/src/ShadowMap.h
-
-C:/Users/Yihe Wang/OneDrive/Local/learning resources/NYU/2019 Fall Semes/CS 6533 Interactive Computer Graphics/Final Project/FinalProject/src/Material.h
-Header.h
-C:/Users/Yihe Wang/OneDrive/Local/learning resources/NYU/2019 Fall Semes/CS 6533 Interactive Computer Graphics/Final Project/FinalProject/src/Header.h
-
-C:/Users/Yihe Wang/OneDrive/Local/learning resources/NYU/2019 Fall Semes/CS 6533 Interactive Computer Graphics/Final Project/FinalProject/src/Mesh.h
-Header.h
-C:/Users/Yihe Wang/OneDrive/Local/learning resources/NYU/2019 Fall Semes/CS 6533 Interactive Computer Graphics/Final Project/FinalProject/src/Header.h
-Editor.h
-C:/Users/Yihe Wang/OneDrive/Local/learning resources/NYU/2019 Fall Semes/CS 6533 Interactive Computer Graphics/Final Project/FinalProject/src/Editor.h
-
-C:/Users/Yihe Wang/OneDrive/Local/learning resources/NYU/2019 Fall Semes/CS 6533 Interactive Computer Graphics/Final Project/FinalProject/src/OmniShadowMap.h
-Header.h
-C:/Users/Yihe Wang/OneDrive/Local/learning resources/NYU/2019 Fall Semes/CS 6533 Interactive Computer Graphics/Final Project/FinalProject/src/Header.h
-ShadowMap.h
-C:/Users/Yihe Wang/OneDrive/Local/learning resources/NYU/2019 Fall Semes/CS 6533 Interactive Computer Graphics/Final Project/FinalProject/src/ShadowMap.h
-
-C:/Users/Yihe Wang/OneDrive/Local/learning resources/NYU/2019 Fall Semes/CS 6533 Interactive Computer Graphics/Final Project/FinalProject/src/Plane.h
-Header.h
-C:/Users/Yihe Wang/OneDrive/Local/learning resources/NYU/2019 Fall Semes/CS 6533 Interactive Computer Graphics/Final Project/FinalProject/src/Header.h
-
-C:/Users/Yihe Wang/OneDrive/Local/learning resources/NYU/2019 Fall Semes/CS 6533 Interactive Computer Graphics/Final Project/FinalProject/src/PointLight.h
-Light.h
-C:/Users/Yihe Wang/OneDrive/Local/learning resources/NYU/2019 Fall Semes/CS 6533 Interactive Computer Graphics/Final Project/FinalProject/src/Light.h
-OmniShadowMap.h
-C:/Users/Yihe Wang/OneDrive/Local/learning resources/NYU/2019 Fall Semes/CS 6533 Interactive Computer Graphics/Final Project/FinalProject/src/OmniShadowMap.h
-
-C:/Users/Yihe Wang/OneDrive/Local/learning resources/NYU/2019 Fall Semes/CS 6533 Interactive Computer Graphics/Final Project/FinalProject/src/Shader.h
-Header.h
-C:/Users/Yihe Wang/OneDrive/Local/learning resources/NYU/2019 Fall Semes/CS 6533 Interactive Computer Graphics/Final Project/FinalProject/src/Header.h
-
-C:/Users/Yihe Wang/OneDrive/Local/learning resources/NYU/2019 Fall Semes/CS 6533 Interactive Computer Graphics/Final Project/FinalProject/src/ShadowMap.h
-cstdio
--
-Header.h
-C:/Users/Yihe Wang/OneDrive/Local/learning resources/NYU/2019 Fall Semes/CS 6533 Interactive Computer Graphics/Final Project/FinalProject/src/Header.h
-
-C:/Users/Yihe Wang/OneDrive/Local/learning resources/NYU/2019 Fall Semes/CS 6533 Interactive Computer Graphics/Final Project/FinalProject/src/Texture.h
-Header.h
-C:/Users/Yihe Wang/OneDrive/Local/learning resources/NYU/2019 Fall Semes/CS 6533 Interactive Computer Graphics/Final Project/FinalProject/src/Header.h
-stb_image.h
-C:/Users/Yihe Wang/OneDrive/Local/learning resources/NYU/2019 Fall Semes/CS 6533 Interactive Computer Graphics/Final Project/FinalProject/src/stb_image.h
-
-C:/Users/Yihe Wang/OneDrive/Local/learning resources/NYU/2019 Fall Semes/CS 6533 Interactive Computer Graphics/Final Project/FinalProject/src/main.cpp
-iostream
--
-Header.h
-C:/Users/Yihe Wang/OneDrive/Local/learning resources/NYU/2019 Fall Semes/CS 6533 Interactive Computer Graphics/Final Project/FinalProject/src/Header.h
-Editor.h
-C:/Users/Yihe Wang/OneDrive/Local/learning resources/NYU/2019 Fall Semes/CS 6533 Interactive Computer Graphics/Final Project/FinalProject/src/Editor.h
-Mesh.h
-C:/Users/Yihe Wang/OneDrive/Local/learning resources/NYU/2019 Fall Semes/CS 6533 Interactive Computer Graphics/Final Project/FinalProject/src/Mesh.h
-Shader.h
-C:/Users/Yihe Wang/OneDrive/Local/learning resources/NYU/2019 Fall Semes/CS 6533 Interactive Computer Graphics/Final Project/FinalProject/src/Shader.h
-Camera.h
-C:/Users/Yihe Wang/OneDrive/Local/learning resources/NYU/2019 Fall Semes/CS 6533 Interactive Computer Graphics/Final Project/FinalProject/src/Camera.h
-Material.h
-C:/Users/Yihe Wang/OneDrive/Local/learning resources/NYU/2019 Fall Semes/CS 6533 Interactive Computer Graphics/Final Project/FinalProject/src/Material.h
-Light.h
-C:/Users/Yihe Wang/OneDrive/Local/learning resources/NYU/2019 Fall Semes/CS 6533 Interactive Computer Graphics/Final Project/FinalProject/src/Light.h
-PointLight.h
-C:/Users/Yihe Wang/OneDrive/Local/learning resources/NYU/2019 Fall Semes/CS 6533 Interactive Computer Graphics/Final Project/FinalProject/src/PointLight.h
-DirectionalLight.h
-C:/Users/Yihe Wang/OneDrive/Local/learning resources/NYU/2019 Fall Semes/CS 6533 Interactive Computer Graphics/Final Project/FinalProject/src/DirectionalLight.h
-Plane.h
-C:/Users/Yihe Wang/OneDrive/Local/learning resources/NYU/2019 Fall Semes/CS 6533 Interactive Computer Graphics/Final Project/FinalProject/src/Plane.h
-Texture.h
-C:/Users/Yihe Wang/OneDrive/Local/learning resources/NYU/2019 Fall Semes/CS 6533 Interactive Computer Graphics/Final Project/FinalProject/src/Texture.h
-stb_image.h
-C:/Users/Yihe Wang/OneDrive/Local/learning resources/NYU/2019 Fall Semes/CS 6533 Interactive Computer Graphics/Final Project/FinalProject/src/stb_image.h
-
-C:/Users/Yihe Wang/OneDrive/Local/learning resources/NYU/2019 Fall Semes/CS 6533 Interactive Computer Graphics/Final Project/FinalProject/src/stb_image.h
-stb_image.h
-C:/Users/Yihe Wang/OneDrive/Local/learning resources/NYU/2019 Fall Semes/CS 6533 Interactive Computer Graphics/Final Project/FinalProject/src/stb_image.h
-stdio.h
--
-stdarg.h
--
-stddef.h
--
-stdlib.h
--
-string.h
--
-limits.h
--
-math.h
--
-stdio.h
--
-assert.h
--
-stdint.h
--
-emmintrin.h
--
-intrin.h
--
-arm_neon.h
 -
 

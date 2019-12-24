@@ -15,6 +15,7 @@ public:
             GLfloat startAngleMoveUnit, GLfloat startMoveUnit);
 
     void keyControl(bool *keys, GLfloat deltaTime);
+    void scrollControl(int yOffset);
 
     glm::vec3 getCameraPosition();
     glm::mat4 calculateViewMatrix();

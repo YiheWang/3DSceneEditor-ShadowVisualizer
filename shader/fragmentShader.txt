@@ -57,7 +57,7 @@ float calcDirectionalShadowMapFactor(DirectionalLight light)
 
     vec3 normal = normalize(Normal);
     vec3 lightDirection = normalize(light.lightDirection);
-    float bias = max(0.005 * (1.0 - dot(normal, lightDirection)), 0.001);
+    float bias = max(0.01 * (1.0 - dot(normal, lightDirection)), 0.005);
     // remove the shadow acne
 
     float shadow = 0.0;

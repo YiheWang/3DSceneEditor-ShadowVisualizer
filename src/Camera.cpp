@@ -22,6 +22,15 @@ Camera::Camera(glm::vec3 startPosition, glm::vec3 startUp,
     update();
 }
 
+void Camera::scrollControl(int yOffset){
+    radius = radius + (float)yOffset * 0.2;
+    if(radius < 0.01f){
+        radius = 0.1f;
+    }
+    updatePosition();
+    // move camera close or far by scroll control
+}
+
 void Camera::keyControl(bool *keys, GLfloat deltaTime){
     GLfloat movedAngle = angleMoveUnit * deltaTime;
     GLfloat movedAmount = moveUnit * deltaTime;

@@ -99,6 +99,7 @@ void framebufferSize(GLFWwindow* window, int width, int height);
 void handleKeys(GLFWwindow* window, int key, int code, int action, int mode);
 void handleMouseButton(GLFWwindow* window, int button, int action, int mods);
 static void cursorPosition(GLFWwindow* window, double xpos, double ypos);
+void scrollCallback(GLFWwindow* window, double xoffset, double yoffset);
 
 void createShaders();
 void loadFile();
@@ -154,6 +155,7 @@ int main()
     glfwSetMouseButtonCallback(mainWindow, handleMouseButton);
     glfwSetFramebufferSizeCallback(mainWindow, framebufferSize);
     glfwSetCursorPosCallback(mainWindow, cursorPosition);
+    glfwSetScrollCallback(mainWindow, scrollCallback);
     //glfwSetInputMode(mainWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
     // Allow modern extension features
@@ -234,6 +236,10 @@ void framebufferSize(GLFWwindow* window, int width, int height){
     bufferWidth = width;
     bufferHeight = height;
     glViewport(0, 0, width, height);
+}
+
+void scrollCallback(GLFWwindow* window, double xoffset, double yoffset){
+    camera.scrollControl(yoffset);
 }
 
 void handleKeys(GLFWwindow* window, int key, int code, int action, int mode){
@@ -593,7 +599,7 @@ void renderDepthCubeOfDirectionalLight(){
 void renderScene(){
     glViewport(0, 0, bufferWidth, bufferHeight);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    
+
     shaderList[0].useShader();
     uniformModel = shaderList[0].getModelLocation();
     uniformProjection = shaderList[0].getProjectionLocation();
