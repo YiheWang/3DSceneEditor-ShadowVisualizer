@@ -46,6 +46,31 @@ glm::mat4 projection(1.0f);
 glm::mat4 view(1.0f);
 glm::mat4 model(1.0f);
 
+GLuint uniformProjection = 0;
+GLuint uniformModel = 0;
+GLuint uniformColor = 0;
+GLuint uniformView = 0;
+GLuint uniformCameraPosition = 0;
+GLuint uniformShininess = 0;
+GLuint uniformSpecularIntensity = 0;
+
+GLuint uniformOmniLightPosition = 0;
+GLuint uniformFarPlane = 0;
+
+struct UniformPointLight{
+    GLuint uniformLightColor = 0;
+    GLuint uniformLightPosition = 0;
+    GLuint uniformAmbientIntensity = 0;
+    GLuint uniformDiffuseIntensity = 0;
+}uniformPointLight;
+
+struct UniformDirectionalLight{
+    GLuint uniformLightColor = 0;
+    GLuint uniformLightDirection = 0;
+    GLuint uniformAmbientIntensity = 0;
+    GLuint uniformDiffuseIntensity = 0;
+}uniformDirectionalLight;
+
 GLfloat deltaTime = 0.0f;
 GLfloat lastTime = 0.0f;
 
@@ -77,6 +102,7 @@ static void cursorPosition(GLFWwindow* window, double xpos, double ypos);
 
 void createShaders();
 void loadFile();
+void renderScene();
 
 int main()
 {
@@ -163,31 +189,6 @@ int main()
             0.1f, 0.6f,
             1.0f, -1.0f, -3.0f);
 
-    GLuint uniformProjection = 0;
-    GLuint uniformModel = 0;
-    GLuint uniformColor = 0;
-    GLuint uniformView = 0;
-    GLuint uniformCameraPosition = 0;
-    GLuint uniformShininess = 0;
-    GLuint uniformSpecularIntensity = 0;
-
-    GLuint uniformOmniLightPosition = 0;
-    GLuint uniformFarPlane = 0;
-
-    struct UniformPointLight{
-        GLuint uniformLightColor = 0;
-        GLuint uniformLightPosition = 0;
-        GLuint uniformAmbientIntensity = 0;
-        GLuint uniformDiffuseIntensity = 0;
-    }uniformPointLight;
-
-    struct UniformDirectionalLight{
-        GLuint uniformLightColor = 0;
-        GLuint uniformLightDirection = 0;
-        GLuint uniformAmbientIntensity = 0;
-        GLuint uniformDiffuseIntensity = 0;
-    }uniformDirectionalLight;
-
     float ratio = (float)bufferWidth / (float)bufferHeight;
     //projection = glm::ortho(-1.0f * ratio, 1.0f * ratio, -1.0f, 1.0f, 0.1f, 100.0f);
     projection = glm::perspective(glm::radians(45.0f), (float)bufferWidth/(float)bufferHeight, 0.1f, 100.0f);
@@ -233,17 +234,7 @@ int main()
         glClear(GL_DEPTH_BUFFER_BIT);
 
         omniShadowShader.validate();
-        //brickTexture.useTexture(GL_TEXTURE0);
-        plane.renderPlane(uniformModel, uniformColor);
-        //brickTexture.disableTexture(GL_TEXTURE0);
-        for(int i = 0; i < meshList.size(); ++i){
-            if(mouseClickMeshIndex == i){
-                meshList[i]->renderMeshWithPhongShading(uniformModel, uniformColor, true);
-            }
-            else {
-                meshList[i]->renderMeshWithPhongShading(uniformModel, uniformColor, false);
-            }
-        }
+        renderScene();
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
         //render depth of scene for directional light
@@ -256,17 +247,7 @@ int main()
         glClear(GL_DEPTH_BUFFER_BIT);
 
         directionalShadowShader.validate();
-        //brickTexture.useTexture(GL_TEXTURE0);
-        plane.renderPlane(uniformModel, uniformColor);
-        //brickTexture.disableTexture(GL_TEXTURE0);
-        for(int i = 0; i < meshList.size(); ++i){
-            if(mouseClickMeshIndex == i){
-                meshList[i]->renderMeshWithPhongShading(uniformModel, uniformColor, true);
-            }
-            else {
-                meshList[i]->renderMeshWithPhongShading(uniformModel, uniformColor, false);
-            }
-        }
+        renderScene();
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 
@@ -318,19 +299,8 @@ int main()
         shaderList[0].setFarPlane(pointLight.getFarPlane());
         pointLight.getShadowMap()->useTexture(GL_TEXTURE3);
 
-        brickTexture.useTexture(GL_TEXTURE1);
         shaderList[0].validate();
-        plane.renderPlane(uniformModel, uniformColor);
-        brickTexture.disableTexture(GL_TEXTURE1);
-        for(int i = 0; i < meshList.size(); ++i){
-            if(mouseClickMeshIndex == i){
-                meshList[i]->renderMeshWithPhongShading(uniformModel, uniformColor, true);
-            }
-            else {
-                meshList[i]->renderMeshWithPhongShading(uniformModel, uniformColor, false);
-            }
-        }
-
+        renderScene();
         glUseProgram(0);
 
         glfwSwapBuffers(mainWindow);
@@ -643,4 +613,23 @@ void loadFile(){
     calculatePhongShadingNormals(indicesOfBunny, verticesOfBunny);
     calculatePhongShadingNormals(indicesOfBumpyCube, verticesOfBumpyCube);
     calculatePhongShadingNormals(indicesOfUnitCube, verticesOfUnitCube);
+}
+
+void renderScene(){
+    brickTexture.useTexture(GL_TEXTURE1);
+    glUniform3f(uniformColor, 1.0f, 1.0f, 1.0f);
+    glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+    plane.renderPlane();
+    brickTexture.disableTexture(GL_TEXTURE1);
+    for(int i = 0; i < meshList.size(); ++i){
+        glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(meshList[i]->getModel()));
+        if(mouseClickMeshIndex == i){
+            glUniform3f(uniformColor, 0.0f, 0.0f, 1.0f);
+            meshList[i]->renderMeshWithPhongShading();
+        }
+        else {
+            glUniform3f(uniformColor, 1.0f, 0.0f, 0.0f);
+            meshList[i]->renderMeshWithPhongShading();
+        }
+    }
 }

@@ -79,14 +79,7 @@ glm::vec3 Mesh::calculateBaryCenter(std::vector<Vertex> vertices, std::vector<Tr
 }
 
 
-void Mesh::renderMeshWithPhongShading(GLuint uniformModel, GLuint uniformColor, bool ifClicked) {
-    if(ifClicked){
-        glUniform3f(uniformColor, 0.0f, 0.0f, 1.0f);
-    }
-    else {
-        glUniform3f(uniformColor, 1.0f, 0.0f, 0.0f);
-    }
-    glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+void Mesh::renderMeshWithPhongShading() {
     glBindVertexArray(VAO);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
     glDrawElements(GL_TRIANGLES, indexCount, GL_UNSIGNED_INT, 0);

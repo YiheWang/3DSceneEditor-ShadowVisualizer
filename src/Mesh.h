@@ -22,7 +22,7 @@ public:
     glm::vec3 getBarycenter();
     glm::mat4 getModel();
     std::string getMeshName() {return meshName;};
-    void renderMeshWithPhongShading(GLuint uniformModel, GLuint uniformColor, bool ifClicked);
+    void renderMeshWithPhongShading();
 
     double findTOfRayIntersectWithMesh(glm::vec3 rayOrigin, glm::vec3 rayDirection);
 
