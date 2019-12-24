@@ -102,6 +102,9 @@ static void cursorPosition(GLFWwindow* window, double xpos, double ypos);
 
 void createShaders();
 void loadFile();
+void renderObjects();
+void renderDepthMapOfPointLight();
+void renderDepthCubeOfDirectionalLight();
 void renderScene();
 
 int main()
@@ -175,7 +178,7 @@ int main()
     brickTexture = Texture("../Texture/brick.png");
     brickTexture.loadTexture();
 
-    camera = Camera(glm::vec3(0.0f, 0.0f, 3.0f), glm::vec3(0.0f, 1.0f, 0.0f),
+    camera = Camera(glm::vec3(0.0f, 0.0f, 5.0f), glm::vec3(0.0f, 1.0f, 0.0f),
             0.872665f, 1.0f); // move 10 degree every time unit
 
     material = Material(1.0f, 132);
@@ -215,92 +218,10 @@ int main()
         view = camera.calculateViewMatrix();
         //update global view, for mouse picking
 
-        // Clear window
-        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-        //render depth of scene for point light
-        omniShadowShader.useShader();
-        uniformModel = omniShadowShader.getModelLocation();
-        uniformOmniLightPosition = omniShadowShader.getOmniLightPositionLocation();
-        uniformFarPlane = omniShadowShader.getFarPlaneLocation();
-
-        glUniform3f(uniformOmniLightPosition, pointLight.getPosition().x, pointLight.getPosition().y, pointLight.getPosition().z);
-        glUniform1f(uniformFarPlane, pointLight.getFarPlane());
-        omniShadowShader.setOmniLightMatrices(pointLight.calculateLightTransform());
-
-        glViewport(0, 0, pointLight.getShadowMap()->getShadowWidth(), pointLight.getShadowMap()->getShadowHeight());
-        pointLight.getShadowMap()->bindFramebuffer();
-        glClear(GL_DEPTH_BUFFER_BIT);
-
-        omniShadowShader.validate();
+        renderDepthMapOfPointLight();
+        renderDepthCubeOfDirectionalLight();
         renderScene();
-        glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
-        //render depth of scene for directional light
-        directionalShadowShader.useShader();
-        uniformModel = directionalShadowShader.getModelLocation();
-        directionalShadowShader.setDirectionalLightTransform(directionalLight.calculateLightTransform());
-
-        glViewport(0, 0, directionalLight.getShadowMap()->getShadowWidth(), directionalLight.getShadowMap()->getShadowHeight());
-        directionalLight.getShadowMap()->bindFramebuffer();
-        glClear(GL_DEPTH_BUFFER_BIT);
-
-        directionalShadowShader.validate();
-        renderScene();
-        glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
-
-        glViewport(0, 0, bufferWidth, bufferHeight);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-        //glUseProgram(shader);
-        shaderList[0].useShader();
-        uniformModel = shaderList[0].getModelLocation();
-        uniformProjection = shaderList[0].getProjectionLocation();
-        uniformColor = shaderList[0].getColorLocation();
-        uniformView = shaderList[0].getViewLocation();
-        uniformCameraPosition = shaderList[0].getCameraPositionLocation();
-        uniformSpecularIntensity = shaderList[0].getSpecularIntensityLocation();
-        uniformShininess = shaderList[0].getShininessLocation();
-
-        uniformPointLight.uniformAmbientIntensity = shaderList[0].getPointLightAmbientIntensityLocation();
-        uniformPointLight.uniformDiffuseIntensity = shaderList[0].getPointLightDiffuseIntensityLocation();
-        uniformPointLight.uniformLightColor = shaderList[0].getPointLightColorLocation();
-        uniformPointLight.uniformLightPosition = shaderList[0].getPointLightPositionLocation();
-
-        uniformDirectionalLight.uniformAmbientIntensity = shaderList[0].getDirectionalLightAmbientIntensityLocation();
-        uniformDirectionalLight.uniformDiffuseIntensity = shaderList[0].getDirectionalLightDiffuseIntensityLocation();
-        uniformDirectionalLight.uniformLightColor = shaderList[0].getDirectionalLightColorLocation();
-        uniformDirectionalLight.uniformLightDirection = shaderList[0].getDirectionalLightDirectionLocation();
-
-        glUniformMatrix4fv(uniformProjection, 1, GL_FALSE, glm::value_ptr(projection));
-        glUniformMatrix4fv(uniformView, 1, GL_FALSE, glm::value_ptr(camera.calculateViewMatrix()));
-        glUniform3f(uniformCameraPosition, camera.getCameraPosition().x, camera.getCameraPosition().y, camera.getCameraPosition().z);
-
-        pointLight.useLight(uniformPointLight.uniformLightColor, uniformPointLight.uniformAmbientIntensity,
-                            uniformPointLight.uniformDiffuseIntensity, uniformPointLight.uniformLightPosition);
-
-        directionalLight.useLight(uniformDirectionalLight.uniformLightColor, uniformDirectionalLight.uniformAmbientIntensity,
-                uniformDirectionalLight.uniformDiffuseIntensity, uniformDirectionalLight.uniformLightDirection);
-
-        material.useMaterial(uniformSpecularIntensity, uniformShininess);
-
-        shaderList[0].setTexture(1);
-        shaderList[0].setDirectionalShadowMap(2);
-        shaderList[0].setOmniShadowMap(3);
-        //set start from 1 to solve the struggling type on texture unit 0
-        //at the very beginning all the texture will be bind to texture unit 0
-        //sampler2D is different type of samplerCube
-
-        shaderList[0].setDirectionalLightTransform(directionalLight.calculateLightTransform());
-        directionalLight.getShadowMap()->useTexture(GL_TEXTURE2);
-
-        shaderList[0].setFarPlane(pointLight.getFarPlane());
-        pointLight.getShadowMap()->useTexture(GL_TEXTURE3);
-
-        shaderList[0].validate();
-        renderScene();
         glUseProgram(0);
 
         glfwSwapBuffers(mainWindow);
@@ -332,7 +253,7 @@ void handleKeys(GLFWwindow* window, int key, int code, int action, int mode){
                 Mesh *mesh = new Mesh();
                 mesh->createMesh(verticesOfBumpyCube, indicesOfBumpyCube, "BumpyCube");
                 mesh->translation(-mesh->getBarycenter());
-                mesh->scaling(0.1f, 0.1f, 0.1f);
+                mesh->scaling(0.15f, 0.15f, 0.15f);
                 meshList.push_back(mesh);
             }
             break;
@@ -341,7 +262,7 @@ void handleKeys(GLFWwindow* window, int key, int code, int action, int mode){
                 Mesh *mesh = new Mesh();
                 mesh->createMesh(verticesOfBunny, indicesOfBunny, "Bunny");
                 mesh->translation(-mesh->getBarycenter());
-                mesh->scaling(4.0f, 4.0f, 4.0f);
+                mesh->scaling(6.0f, 6.0f, 6.0f);
                 meshList.push_back(mesh);
             }
             break;
@@ -615,7 +536,7 @@ void loadFile(){
     calculatePhongShadingNormals(indicesOfUnitCube, verticesOfUnitCube);
 }
 
-void renderScene(){
+void renderObjects(){
     brickTexture.useTexture(GL_TEXTURE1);
     glUniform3f(uniformColor, 1.0f, 1.0f, 1.0f);
     glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
@@ -632,4 +553,91 @@ void renderScene(){
             meshList[i]->renderMeshWithPhongShading();
         }
     }
+}
+
+void renderDepthMapOfPointLight(){
+    //render depth of scene for point light
+    omniShadowShader.useShader();
+    uniformModel = omniShadowShader.getModelLocation();
+    uniformOmniLightPosition = omniShadowShader.getOmniLightPositionLocation();
+    uniformFarPlane = omniShadowShader.getFarPlaneLocation();
+
+    glUniform3f(uniformOmniLightPosition, pointLight.getPosition().x, pointLight.getPosition().y, pointLight.getPosition().z);
+    glUniform1f(uniformFarPlane, pointLight.getFarPlane());
+    omniShadowShader.setOmniLightMatrices(pointLight.calculateLightTransform());
+
+    glViewport(0, 0, pointLight.getShadowMap()->getShadowWidth(), pointLight.getShadowMap()->getShadowHeight());
+    pointLight.getShadowMap()->bindFramebuffer();
+    glClear(GL_DEPTH_BUFFER_BIT);
+
+    omniShadowShader.validate();
+    renderObjects();
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
+
+void renderDepthCubeOfDirectionalLight(){
+    //render depth of scene for directional light
+    directionalShadowShader.useShader();
+    uniformModel = directionalShadowShader.getModelLocation();
+    directionalShadowShader.setDirectionalLightTransform(directionalLight.calculateLightTransform());
+
+    glViewport(0, 0, directionalLight.getShadowMap()->getShadowWidth(), directionalLight.getShadowMap()->getShadowHeight());
+    directionalLight.getShadowMap()->bindFramebuffer();
+    glClear(GL_DEPTH_BUFFER_BIT);
+
+    directionalShadowShader.validate();
+    renderObjects();
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
+
+void renderScene(){
+    glViewport(0, 0, bufferWidth, bufferHeight);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    
+    shaderList[0].useShader();
+    uniformModel = shaderList[0].getModelLocation();
+    uniformProjection = shaderList[0].getProjectionLocation();
+    uniformColor = shaderList[0].getColorLocation();
+    uniformView = shaderList[0].getViewLocation();
+    uniformCameraPosition = shaderList[0].getCameraPositionLocation();
+    uniformSpecularIntensity = shaderList[0].getSpecularIntensityLocation();
+    uniformShininess = shaderList[0].getShininessLocation();
+
+    uniformPointLight.uniformAmbientIntensity = shaderList[0].getPointLightAmbientIntensityLocation();
+    uniformPointLight.uniformDiffuseIntensity = shaderList[0].getPointLightDiffuseIntensityLocation();
+    uniformPointLight.uniformLightColor = shaderList[0].getPointLightColorLocation();
+    uniformPointLight.uniformLightPosition = shaderList[0].getPointLightPositionLocation();
+
+    uniformDirectionalLight.uniformAmbientIntensity = shaderList[0].getDirectionalLightAmbientIntensityLocation();
+    uniformDirectionalLight.uniformDiffuseIntensity = shaderList[0].getDirectionalLightDiffuseIntensityLocation();
+    uniformDirectionalLight.uniformLightColor = shaderList[0].getDirectionalLightColorLocation();
+    uniformDirectionalLight.uniformLightDirection = shaderList[0].getDirectionalLightDirectionLocation();
+
+    glUniformMatrix4fv(uniformProjection, 1, GL_FALSE, glm::value_ptr(projection));
+    glUniformMatrix4fv(uniformView, 1, GL_FALSE, glm::value_ptr(camera.calculateViewMatrix()));
+    glUniform3f(uniformCameraPosition, camera.getCameraPosition().x, camera.getCameraPosition().y, camera.getCameraPosition().z);
+
+    pointLight.useLight(uniformPointLight.uniformLightColor, uniformPointLight.uniformAmbientIntensity,
+                        uniformPointLight.uniformDiffuseIntensity, uniformPointLight.uniformLightPosition);
+
+    directionalLight.useLight(uniformDirectionalLight.uniformLightColor, uniformDirectionalLight.uniformAmbientIntensity,
+                              uniformDirectionalLight.uniformDiffuseIntensity, uniformDirectionalLight.uniformLightDirection);
+
+    material.useMaterial(uniformSpecularIntensity, uniformShininess);
+
+    shaderList[0].setTexture(1);
+    shaderList[0].setDirectionalShadowMap(2);
+    shaderList[0].setOmniShadowMap(3);
+    //set start from 1 to solve the struggling type on texture unit 0
+    //at the very beginning all the texture will be bind to texture unit 0
+    //sampler2D is different type of samplerCube
+
+    shaderList[0].setDirectionalLightTransform(directionalLight.calculateLightTransform());
+    directionalLight.getShadowMap()->useTexture(GL_TEXTURE2);
+
+    shaderList[0].setFarPlane(pointLight.getFarPlane());
+    pointLight.getShadowMap()->useTexture(GL_TEXTURE3);
+
+    shaderList[0].validate();
+    renderObjects();
 }
