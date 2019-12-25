@@ -1438,17 +1438,17 @@ detail/setup.hpp
 detail/func_vector_relational.inl
 ../libs/glm/glm/detail/func_vector_relational.inl
 
-C:/Users/Yihe Wang/OneDrive/Local/learning resources/NYU/2019 Fall Semes/CS 6533 Interactive Computer Graphics/Final Project/FinalProject/src/Camera.cpp
-Camera.h
-C:/Users/Yihe Wang/OneDrive/Local/learning resources/NYU/2019 Fall Semes/CS 6533 Interactive Computer Graphics/Final Project/FinalProject/src/Camera.h
-Constant.h
-C:/Users/Yihe Wang/OneDrive/Local/learning resources/NYU/2019 Fall Semes/CS 6533 Interactive Computer Graphics/Final Project/FinalProject/src/Constant.h
+C:/Users/Yihe Wang/OneDrive/Local/learning resources/NYU/2019 Fall Semes/CS 6533 Interactive Computer Graphics/Final Project/FinalProject/src/DirectionalLight.cpp
+DirectionalLight.h
+C:/Users/Yihe Wang/OneDrive/Local/learning resources/NYU/2019 Fall Semes/CS 6533 Interactive Computer Graphics/Final Project/FinalProject/src/DirectionalLight.h
 
-C:/Users/Yihe Wang/OneDrive/Local/learning resources/NYU/2019 Fall Semes/CS 6533 Interactive Computer Graphics/Final Project/FinalProject/src/Camera.h
+C:/Users/Yihe Wang/OneDrive/Local/learning resources/NYU/2019 Fall Semes/CS 6533 Interactive Computer Graphics/Final Project/FinalProject/src/DirectionalLight.h
+Light.h
+C:/Users/Yihe Wang/OneDrive/Local/learning resources/NYU/2019 Fall Semes/CS 6533 Interactive Computer Graphics/Final Project/FinalProject/src/Light.h
+
+C:/Users/Yihe Wang/OneDrive/Local/learning resources/NYU/2019 Fall Semes/CS 6533 Interactive Computer Graphics/Final Project/FinalProject/src/Editor.h
 Header.h
 C:/Users/Yihe Wang/OneDrive/Local/learning resources/NYU/2019 Fall Semes/CS 6533 Interactive Computer Graphics/Final Project/FinalProject/src/Header.h
-
-C:/Users/Yihe Wang/OneDrive/Local/learning resources/NYU/2019 Fall Semes/CS 6533 Interactive Computer Graphics/Final Project/FinalProject/src/Constant.h
 
 C:/Users/Yihe Wang/OneDrive/Local/learning resources/NYU/2019 Fall Semes/CS 6533 Interactive Computer Graphics/Final Project/FinalProject/src/Header.h
 iostream
@@ -1483,4 +1483,26 @@ GL/gl.h
 -
 GLFW/glfw3.h
 -
+
+C:/Users/Yihe Wang/OneDrive/Local/learning resources/NYU/2019 Fall Semes/CS 6533 Interactive Computer Graphics/Final Project/FinalProject/src/Light.h
+Header.h
+C:/Users/Yihe Wang/OneDrive/Local/learning resources/NYU/2019 Fall Semes/CS 6533 Interactive Computer Graphics/Final Project/FinalProject/src/Header.h
+ShadowMap.h
+C:/Users/Yihe Wang/OneDrive/Local/learning resources/NYU/2019 Fall Semes/CS 6533 Interactive Computer Graphics/Final Project/FinalProject/src/ShadowMap.h
+
+C:/Users/Yihe Wang/OneDrive/Local/learning resources/NYU/2019 Fall Semes/CS 6533 Interactive Computer Graphics/Final Project/FinalProject/src/Mesh.cpp
+Mesh.h
+C:/Users/Yihe Wang/OneDrive/Local/learning resources/NYU/2019 Fall Semes/CS 6533 Interactive Computer Graphics/Final Project/FinalProject/src/Mesh.h
+
+C:/Users/Yihe Wang/OneDrive/Local/learning resources/NYU/2019 Fall Semes/CS 6533 Interactive Computer Graphics/Final Project/FinalProject/src/Mesh.h
+Header.h
+C:/Users/Yihe Wang/OneDrive/Local/learning resources/NYU/2019 Fall Semes/CS 6533 Interactive Computer Graphics/Final Project/FinalProject/src/Header.h
+Editor.h
+C:/Users/Yihe Wang/OneDrive/Local/learning resources/NYU/2019 Fall Semes/CS 6533 Interactive Computer Graphics/Final Project/FinalProject/src/Editor.h
+
+C:/Users/Yihe Wang/OneDrive/Local/learning resources/NYU/2019 Fall Semes/CS 6533 Interactive Computer Graphics/Final Project/FinalProject/src/ShadowMap.h
+cstdio
+-
+Header.h
+C:/Users/Yihe Wang/OneDrive/Local/learning resources/NYU/2019 Fall Semes/CS 6533 Interactive Computer Graphics/Final Project/FinalProject/src/Header.h
 

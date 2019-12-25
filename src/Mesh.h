@@ -19,6 +19,9 @@ public:
     void scaling(glm::vec3 scaling);
     void rotation(float rotateAngle, int rotatingAxis);
 
+    void circularMotion(float rotateAngle, int rotatingAxis);
+    void animation();
+
     glm::vec3 getBarycenter();
     glm::mat4 getModel();
     std::string getMeshName() {return meshName;};

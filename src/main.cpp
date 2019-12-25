@@ -78,6 +78,7 @@ bool keys[1024];
 bool ifControlDirectionalLight = true;
 
 int mouseClickMeshIndex = -1;
+bool animationMode = false;
 
 // Vertex Shader
 static const char* vShader = "../Shader/vertexShader.txt";
@@ -103,10 +104,17 @@ void scrollCallback(GLFWwindow* window, double xoffset, double yoffset);
 
 void createShaders();
 void loadFile();
+
+void renderPlane();
+void renderMeshes();
 void renderObjects();
 void renderDepthMapOfPointLight();
 void renderDepthCubeOfDirectionalLight();
 void renderScene();
+
+void createUnitCube();
+void createBunny();
+void createBumpyCube();
 
 int main()
 {
@@ -220,6 +228,10 @@ int main()
         view = camera.calculateViewMatrix();
         //update global view, for mouse picking
 
+        // Clear window
+        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
         renderDepthMapOfPointLight();
         renderDepthCubeOfDirectionalLight();
         renderScene();
@@ -242,6 +254,28 @@ void scrollCallback(GLFWwindow* window, double xoffset, double yoffset){
     camera.scrollControl(yoffset);
 }
 
+void createUnitCube(){
+    Mesh *mesh = new Mesh();
+    mesh->createMesh(verticesOfUnitCube, indicesOfUnitCube, "UnitCube");
+    meshList.push_back(mesh);
+}
+
+void createBunny(){
+    Mesh *mesh = new Mesh();
+    mesh->createMesh(verticesOfBunny, indicesOfBunny, "Bunny");
+    mesh->translation(-mesh->getBarycenter());
+    mesh->scaling(6.0f, 6.0f, 6.0f);
+    meshList.push_back(mesh);
+}
+
+void createBumpyCube(){
+    Mesh *mesh = new Mesh();
+    mesh->createMesh(verticesOfBumpyCube, indicesOfBumpyCube, "BumpyCube");
+    mesh->translation(-mesh->getBarycenter());
+    mesh->scaling(0.15f, 0.15f, 0.15f);
+    meshList.push_back(mesh);
+}
+
 void handleKeys(GLFWwindow* window, int key, int code, int action, int mode){
     if(key == GLFW_KEY_ESCAPE && action == GLFW_PRESS){
         glfwSetWindowShouldClose(window, GL_TRUE);
@@ -249,27 +283,17 @@ void handleKeys(GLFWwindow* window, int key, int code, int action, int mode){
     switch (key){
         case GLFW_KEY_1:
             if(action == GLFW_PRESS){
-                Mesh *mesh = new Mesh();
-                mesh->createMesh(verticesOfUnitCube, indicesOfUnitCube, "UnitCube");
-                meshList.push_back(mesh);
+                createUnitCube();
             }
             break;
         case GLFW_KEY_2:
             if(action == GLFW_PRESS){
-                Mesh *mesh = new Mesh();
-                mesh->createMesh(verticesOfBumpyCube, indicesOfBumpyCube, "BumpyCube");
-                mesh->translation(-mesh->getBarycenter());
-                mesh->scaling(0.15f, 0.15f, 0.15f);
-                meshList.push_back(mesh);
+                createBumpyCube();
             }
             break;
         case GLFW_KEY_3:
             if(action == GLFW_PRESS){
-                Mesh *mesh = new Mesh();
-                mesh->createMesh(verticesOfBunny, indicesOfBunny, "Bunny");
-                mesh->translation(-mesh->getBarycenter());
-                mesh->scaling(6.0f, 6.0f, 6.0f);
-                meshList.push_back(mesh);
+                createBunny();
             }
             break;
 
@@ -468,6 +492,13 @@ void handleKeys(GLFWwindow* window, int key, int code, int action, int mode){
             }
             break;
 
+            // turn on animation mode
+        case GLFW_KEY_R:
+            if(action == GLFW_PRESS){
+                animationMode = !animationMode;
+            }
+            break;
+
             //delete mesh
         case GLFW_KEY_DELETE:
             if(action == GLFW_PRESS){
@@ -542,13 +573,19 @@ void loadFile(){
     calculatePhongShadingNormals(indicesOfUnitCube, verticesOfUnitCube);
 }
 
-void renderObjects(){
+void renderPlane(){
     brickTexture.useTexture(GL_TEXTURE1);
     glUniform3f(uniformColor, 1.0f, 1.0f, 1.0f);
     glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
     plane.renderPlane();
     brickTexture.disableTexture(GL_TEXTURE1);
+}
+
+void renderMeshes(){
     for(int i = 0; i < meshList.size(); ++i){
+        if(animationMode){
+            meshList[i]->animation();
+        }
         glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(meshList[i]->getModel()));
         if(mouseClickMeshIndex == i){
             glUniform3f(uniformColor, 0.0f, 0.0f, 1.0f);
@@ -559,6 +596,11 @@ void renderObjects(){
             meshList[i]->renderMeshWithPhongShading();
         }
     }
+}
+
+void renderObjects(){
+    renderPlane();
+    renderMeshes();
 }
 
 void renderDepthMapOfPointLight(){

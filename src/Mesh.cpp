@@ -153,6 +153,10 @@ double Mesh::findTOfTriangle(glm::vec3 rayOrigin, glm::vec3 rayDirection, Vertex
     return t;
 }
 
+void Mesh::animation(){
+    circularMotion(0.2, 2);
+}
+
 void Mesh::translation(float xTranslate, float yTranslate, float zTranslate){
     glm::mat4 translationModel(1.0f);
     translationModel = glm::translate(translationModel, glm::vec3(xTranslate, yTranslate, zTranslate));
@@ -168,30 +172,36 @@ void Mesh::translation(glm::vec3 translation){
 }
 
 void Mesh::scaling(float xScale, float yScale, float zScale){
+    glm::mat4 translateToCenter(1.0f);
     glm::mat4 scalingModel(1.0f);
+    glm::mat4 translateFromCenter(1.0f);
+    translateToCenter = glm::translate(translateToCenter, -barycenter);
     scalingModel = glm::scale(scalingModel, glm::vec3(xScale, yScale, zScale));
-    barycenter = (scalingModel * glm::vec4(barycenter, 1)).xyz;
-    model = scalingModel * model;
+    translateFromCenter = glm::translate(translateFromCenter, barycenter);
+    model = translateFromCenter * scalingModel * translateToCenter * model;
 }
 
 void Mesh::scaling(glm::vec3 scaling){
+    glm::mat4 translateToCenter(1.0f);
     glm::mat4 scalingModel(1.0f);
+    glm::mat4 translateFromCenter(1.0f);
+    translateToCenter = glm::translate(translateToCenter, -barycenter);
     scalingModel = glm::scale(scalingModel, glm::vec3(scaling));
-    barycenter = (scalingModel * glm::vec4(barycenter, 1)).xyz;
-    model = scalingModel * model;
+    translateFromCenter = glm::translate(translateFromCenter, barycenter);
+    model = translateFromCenter * scalingModel * translateToCenter * model;
 }
 
 void Mesh::rotation(float rotateAngle, int rotatingAxis){
     glm::vec3 axis(1.0f);
     if(rotatingAxis == 1){
         axis = glm::vec3(1.0f, 0.0f, 0.0f);
-    }
+    }// x
     else if(rotatingAxis == 2){
         axis = glm::vec3(0.0f, 1.0f, 0.0f);
-    }
+    }// y
     else if(rotatingAxis == 3){
         axis = glm::vec3(0.0f, 0.0f, 1.0f);
-    }
+    }// z
 
     glm::mat4 translateToCenter(1.0f);
     glm::mat4 rotationModel(1.0f);
@@ -200,6 +210,24 @@ void Mesh::rotation(float rotateAngle, int rotatingAxis){
     rotationModel = glm::rotate(rotationModel, glm::radians(rotateAngle), axis);
     translateFromCenter = glm::translate(translateFromCenter, barycenter);
     model = translateFromCenter * rotationModel * translateToCenter * model;
+}
+
+void Mesh::circularMotion(float rotateAngle, int rotatingAxis){
+    glm::vec3 axis(1.0f);
+    if(rotatingAxis == 1){
+        axis = glm::vec3(1.0f, 0.0f, 0.0f);
+    }// x
+    else if(rotatingAxis == 2){
+        axis = glm::vec3(0.0f, 1.0f, 0.0f);
+    }// y
+    else if(rotatingAxis == 3){
+        axis = glm::vec3(0.0f, 0.0f, 1.0f);
+    }// z
+
+    glm::mat4 rotationModel(1.0f);
+    rotationModel = glm::rotate(rotationModel, glm::radians(rotateAngle), axis);
+    barycenter = (rotationModel * glm::vec4(barycenter, 1)).xyz;
+    model = rotationModel * model;
 }
 
 glm::vec3 Mesh::getBarycenter(){
