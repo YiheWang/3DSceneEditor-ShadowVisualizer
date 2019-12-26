@@ -66,7 +66,7 @@ This is a simple 3D scene editor writen by C++ and OpenGL. Users are allowed to 
  - **KeyESC**:  Press ESC to close the window.
 
 ## Demo Video
-<iframe width="560" height="315" src="https://www.youtube.com/embed/Mcga910gKZw" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+https://youtu.be/Mcga910gKZw
 
 
 ## Reference
