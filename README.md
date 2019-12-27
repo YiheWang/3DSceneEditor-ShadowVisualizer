@@ -3,6 +3,9 @@
 ## Introduction
 This is a simple 3D scene editor writen by C++ and OpenGL. Users are allowed to create, edit and delete multiple 3D objects by using mouse and keyboard. There are two light sources in the scene. One is directional light and one is point light.
 
+## C++ Libraries
+GLFW, GLEW, GLM
+
 ## Techniques
 - Mesh file reading and creating multiple objects.
 - Objects rendering using **Phong lighting**.
